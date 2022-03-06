@@ -52,30 +52,30 @@
         where userId = #{userId}
     </select>
 
-    <update id="updateUsers" parameterType="com.imooc.bilibili.domain.User">
-        update
-        t_user
-        set
-        <if test="phone != null and phone != '' ">
-            phone = #{phone},
-        </if>
-        <if test="email != null and email != '' ">
-            email = #{email},
-        </if>
-        <if test="password != null and password != '' ">
-            password = #{password},
-        </if>
-        updateTime = #{updateTime}
-        where
-        id = #{id}
-    </update>
+    <!--    <update id="updateUsers" parameterType="com.imooc.bilibili.domain.User">-->
+    <!--        update-->
+    <!--        t_user-->
+    <!--        set-->
+    <!--        <if test="phone != null and phone != '' ">-->
+    <!--            phone = #{phone},-->
+    <!--        </if>-->
+    <!--        <if test="email != null and email != '' ">-->
+    <!--            email = #{email},-->
+    <!--        </if>-->
+    <!--        <if test="password != null and password != '' ">-->
+    <!--            password = #{password},-->
+    <!--        </if>-->
+    <!--        updateTime = #{updateTime}-->
+    <!--        where-->
+    <!--        id = #{id}-->
+    <!--    </update>-->
 
-    <select id="getUserByPhoneOrEmail" parameterType="java.lang.String" resultType="com.imooc.bilibili.domain.User">
-        select *
-        from t_user
-        where phone = #{phone}
-           or email = #{email}
-    </select>
+    <!--    <select id="getUserByPhoneOrEmail" parameterType="java.lang.String" resultType="com.imooc.bilibili.domain.User">-->
+    <!--        select *-->
+    <!--        from t_user-->
+    <!--        where phone = #{phone}-->
+    <!--           or email = #{email}-->
+    <!--    </select>-->
 
     <update id="updateUserInfos" parameterType="com.imooc.bilibili.domain.UserInfo">
         update
@@ -101,6 +101,21 @@
         userId = #{userId}
     </update>
 
+    <!--    <select id="getUserInfoByUserIds" resultType="com.imooc.bilibili.domain.UserInfo">-->
+    <!--        select-->
+    <!--        *-->
+    <!--        from-->
+    <!--        t_user_info-->
+    <!--        where-->
+    <!--        1=1-->
+    <!--        <if test="userIdList != null and userIdList.size > 0">-->
+    <!--            and userId in-->
+    <!--            <foreach collection="userIdList" item="userId" index="index" open="(" close=")" separator=",">-->
+    <!--                #{userId}-->
+    <!--            </foreach>-->
+    <!--        </if>-->
+    <!--    </select>-->
+
     <select id="getUserInfoByUserIds" resultType="com.imooc.bilibili.domain.UserInfo">
         select
         *
@@ -116,79 +131,79 @@
         </if>
     </select>
 
-    <select id="pageCountUserInfos" parameterType="java.util.Map" resultType="java.lang.Integer">
-        select
-        count(1)
-        from
-        t_user_info
-        where
-        1=1
-        <if test="nick != null and nick != '' ">
-            and nick like '%${nick}%'
-        </if>
-    </select>
+    <!--    <select id="pageCountUserInfos" parameterType="java.util.Map" resultType="java.lang.Integer">-->
+    <!--        select-->
+    <!--        count(1)-->
+    <!--        from-->
+    <!--        t_user_info-->
+    <!--        where-->
+    <!--        1=1-->
+    <!--        <if test="nick != null and nick != '' ">-->
+    <!--            and nick like '%${nick}%'-->
+    <!--        </if>-->
+    <!--    </select>-->
 
-    <select id="pageListUserInfos" parameterType="java.util.Map" resultType="com.imooc.bilibili.domain.UserInfo">
-        select
-        *
-        from
-        t_user_info
-        where
-        1=1
-        <if test="nick != null and nick != '' ">
-            and nick like '%${nick}%'
-        </if>
-        order by id desc
-        limit #{start}, #{limit}
-    </select>
+    <!--    <select id="pageListUserInfos" parameterType="java.util.Map" resultType="com.imooc.bilibili.domain.UserInfo">-->
+    <!--        select-->
+    <!--        *-->
+    <!--        from-->
+    <!--        t_user_info-->
+    <!--        where-->
+    <!--        1=1-->
+    <!--        <if test="nick != null and nick != '' ">-->
+    <!--            and nick like '%${nick}%'-->
+    <!--        </if>-->
+    <!--        order by id desc-->
+    <!--        limit #{start}, #{limit}-->
+    <!--    </select>-->
 
-    <delete id="deleteRefreshToken">
-        delete
-        from t_refresh_token
-        where refreshToken = #{refreshToken}
-          and userId = #{userId}
-    </delete>
+    <!--    <delete id="deleteRefreshToken">-->
+    <!--        delete-->
+    <!--        from t_refresh_token-->
+    <!--        where refreshToken = #{refreshToken}-->
+    <!--          and userId = #{userId}-->
+    <!--    </delete>-->
 
-    <delete id="deleteRefreshTokenByUserId" parameterType="java.lang.Long">
-        delete
-        from t_refresh_token
-        where userId = #{userId}
-    </delete>
+    <!--    <delete id="deleteRefreshTokenByUserId" parameterType="java.lang.Long">-->
+    <!--        delete-->
+    <!--        from t_refresh_token-->
+    <!--        where userId = #{userId}-->
+    <!--    </delete>-->
 
 
-    <insert id="addRefreshToken">
-        insert into t_refresh_token(refreshToken,
-                                    userId,
-                                    createTime)
-        values (#{refreshToken},
-                #{userId},
-                #{createTime})
-    </insert>
+    <!--    <insert id="addRefreshToken">-->
+    <!--        insert into t_refresh_token(refreshToken,-->
+    <!--                                    userId,-->
+    <!--                                    createTime)-->
+    <!--        values (#{refreshToken},-->
+    <!--                #{userId},-->
+    <!--                #{createTime})-->
+    <!--    </insert>-->
 
-    <select id="getRefreshTokenDetail" parameterType="java.lang.String"
-            resultType="com.imooc.bilibili.domain.RefreshTokenDetail">
-        select *
-        from t_refresh_token
-        where refreshToken = #{refreshToken}
-    </select>
+    <!--    <select id="getRefreshTokenDetail" parameterType="java.lang.String"-->
+    <!--            resultType="com.imooc.bilibili.domain.RefreshTokenDetail">-->
+    <!--        select *-->
+    <!--        from t_refresh_token-->
+    <!--        where refreshToken = #{refreshToken}-->
+    <!--    </select>-->
 
-    <select id="getRefreshTokenByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
-        select refreshToken
-        from t_refresh_token
-        where userId = #{userId}
-    </select>
+    <!--    <select id="getRefreshTokenByUserId" parameterType="java.lang.Long" resultType="java.lang.String">-->
+    <!--        select refreshToken-->
+    <!--        from t_refresh_token-->
+    <!--        where userId = #{userId}-->
+    <!--    </select>-->
 
-    <select id="batchGetUserInfoByUserIds" resultType="com.imooc.bilibili.domain.UserInfo">
-        select
-        *
-        from
-        t_user_info
-        where
-        userId in
-        <foreach collection="userIdList" item="userId" open="(" close=")" separator=",">
-            #{userId}
-        </foreach>
-    </select>
+    <!--    <select id="batchGetUserInfoByUserIds" resultType="com.imooc.bilibili.domain.UserInfo">-->
+    <!--        select-->
+    <!--        *-->
+    <!--        from-->
+    <!--        t_user_info-->
+    <!--        where-->
+    <!--        userId in-->
+    <!--        <foreach collection="userIdList" item="userId" open="(" close=")" separator=",">-->
+    <!--            #{userId}-->
+    <!--        </foreach>-->
+    <!--    </select>-->
 
 
 </mapper>

@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author luf
@@ -65,7 +67,7 @@ public class UserService {
         return userDao.getUserByPhone(phone);
     }
 
-    public String login(User user) {
+    public String login(User user) throws Exception {
 
         String phone = user.getPhone();
         if (StringUtils.isNullOrEmpty(phone)) {
@@ -91,9 +93,36 @@ public class UserService {
             throw new ConditionException("密码错误！");
         }
         // 此时密码正确
-        TokenUtil tokenUtil = new TokenUtil();
-        return tokenUtil.generateToken(dbUser.getId());
+        return TokenUtil.generateToken(dbUser.getId());
+    }
 
+    /**
+     * 获取用户信息
+     * 注意：user表中的id就是userId，也就是UserInfo中的userId
+     **/
+    public User getUserInfo(Long userId) {
+        // 根据userId，查询此用户
+        User user = userDao.getUserById(userId);
+        UserInfo userInfo = userDao.getUserInfoByUserId(userId);
+        user.setUserInfo(userInfo);
+        return user;
+    }
 
+    /**
+     * 更新用户信息
+     */
+    public void updateUserInfos(UserInfo userInfo) {
+         userDao.updateUserInfos(userInfo);
+    }
+
+    /**
+     * 根据id获取用户
+     */
+    public User getUserById(Long id) {
+        return userDao.getUserById(id);
+    }
+
+    public List<UserInfo> getUserInfoByUserIds(Set<Long> userIdList) {
+        return userDao.getUserInfoByUserIds(userIdList);
     }
 }

@@ -3,6 +3,7 @@ package com.imooc.bilibili.domain;
 import java.util.Date;
 
 /**
+ * 用户信息
  * @author luf
  * @date 2022/03/03 21:14
  **/

@@ -3,11 +3,12 @@ package com.imooc.bilibili.domain;
 import java.util.Date;
 
 /**
+ * 用户账号相关
  * @author luf
  * @date 2022/03/03 21:13
  **/
 public class User {
-    private Long id;
+    private Long id;//userId
 
     private String phone;
 
