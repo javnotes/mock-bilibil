@@ -14,10 +14,7 @@ import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author luf
@@ -136,9 +133,12 @@ public class UserService {
         params.put("start", (pageNum - 1) * size);
         params.put("limit", size);
         // 先获取符合条件的总记录数
-        Integer total = userDao.pageCountUsrInfos(params);
-
-
-        userDao.pageListUserInfos(params);
+        Integer total = userDao.pageCountUserInfos(params);
+        List<UserInfo> list = new ArrayList<>();
+        if (total > 0) {
+            //pageListUserInfos：真正的分页查询
+            list = userDao.pageListUserInfos(params);
+        }
+        return new PageResult<>(total, list);
     }
 }

@@ -6,10 +6,13 @@ import com.imooc.bilibili.domain.JsonResponse;
 import com.imooc.bilibili.domain.PageResult;
 import com.imooc.bilibili.domain.User;
 import com.imooc.bilibili.domain.UserInfo;
+import com.imooc.bilibili.service.UserFollowingService;
 import com.imooc.bilibili.service.UserService;
 import com.imooc.bilibili.service.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author luf
@@ -22,6 +25,8 @@ public class UserApi {
     private UserService userService;
     @Autowired
     private UserSupport userSupport;
+    @Autowired
+    private UserFollowingService userFollowingService;
 
     /**
      * 获取当前登录用户的信息，虽然根据 userId 来获取，但该方法不需要参数，是在token中获取 userId
@@ -86,6 +91,11 @@ public class UserApi {
         params.put("nick", nick);
         params.put("userId", userId);
         PageResult<UserInfo> result = userService.pageListUserInfos(params);
+        if (result.getTotal() > 0) {
+            List<UserInfo> checkUserInfoList = userFollowingService.checkFollowingStatus(result.getList(), userId);
+            result.setList(checkUserInfoList);
+        }
+        return new JsonResponse<>(result);
 
     }
 }
