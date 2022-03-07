@@ -56,6 +56,7 @@ public class UserFollowingApi {
 
     /**
      * 增加关注分组
+     * 新建分组后，把分组Id回传至前端
      */
     @PostMapping("/user-following-groups")
     public JsonResponse<Long> addUserFollowingGroups(@RequestBody FollowingGroup followingGroup) {
