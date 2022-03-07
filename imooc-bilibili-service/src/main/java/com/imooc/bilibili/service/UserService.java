@@ -1,6 +1,8 @@
 package com.imooc.bilibili.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.imooc.bilibili.dao.UserDao;
+import com.imooc.bilibili.domain.PageResult;
 import com.imooc.bilibili.domain.User;
 import com.imooc.bilibili.domain.UserInfo;
 import com.imooc.bilibili.domain.constant.UserConstant;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -112,7 +115,7 @@ public class UserService {
      * 更新用户信息
      */
     public void updateUserInfos(UserInfo userInfo) {
-         userDao.updateUserInfos(userInfo);
+        userDao.updateUserInfos(userInfo);
     }
 
     /**
@@ -124,5 +127,18 @@ public class UserService {
 
     public List<UserInfo> getUserInfoByUserIds(Set<Long> userIdList) {
         return userDao.getUserInfoByUserIds(userIdList);
+    }
+
+    public PageResult<UserInfo> pageListUserInfos(JSONObject params) {
+        //计算在数据中的查询时的起始位置和限制条数(查询多少条数据)
+        Integer pageNum = params.getInteger("pageNum");
+        Integer size = params.getInteger("size");
+        params.put("start", (pageNum - 1) * size);
+        params.put("limit", size);
+        // 先获取符合条件的总记录数
+        Integer total = userDao.pageCountUsrInfos(params);
+
+
+        userDao.pageListUserInfos(params);
     }
 }
