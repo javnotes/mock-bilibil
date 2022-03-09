@@ -3,7 +3,7 @@ package com.imooc.api;
 import com.imooc.api.support.UserSupport;
 import com.imooc.bilibili.domain.JsonResponse;
 import com.imooc.bilibili.domain.UserMoment;
-import com.imooc.service.UserMomentsService;
+import com.imooc.bilibili.service.UserMomentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

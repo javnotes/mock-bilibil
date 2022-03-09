@@ -25,7 +25,6 @@ public class TokenUtil {
      * 创建 JWT
      */
     public static String generateToken(Long userId) throws Exception {
-
         Algorithm algorithm = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -40,8 +39,9 @@ public class TokenUtil {
      * 刷新令牌
      */
 
+
     /**
-     * 验证JWT，返回 userId
+     * 获取 userId，通过验证 token 的方式
      */
     public static Long verifyToken(String token) {
         try {
@@ -57,9 +57,4 @@ public class TokenUtil {
             throw new ConditionException("非法用户token！");
         }
     }
-
-    /**
-     * 获取 userId，通过验证 token 的方式
-     */
-
 }

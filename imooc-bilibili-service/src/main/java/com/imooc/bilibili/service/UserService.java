@@ -14,7 +14,10 @@ import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author luf
@@ -46,19 +49,19 @@ public class UserService {
         } catch (Exception e) {
             throw new ConditionException("密码解析失败！");
         }
-        // md5加密密码
+        // md5加密密码，即不以明文的方式存储密码
         String md5Password = MD5Util.sign(rawPassword, salt, "UTF-8");
         user.setSalt(salt);
         user.setPassword(md5Password);
         user.setCreateTime(now);
         userDao.addUser(user);
 
-        //需要关联处理用户信息表
+        //需要关联处理用户信息表，注册时一些信息给予默认值
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(user.getId());
         userInfo.setNick(UserConstant.DEFAULT_NICK);
         userInfo.setBirth(UserConstant.DEFAULT_BIRTH);
-        userInfo.setGender(UserConstant.GENDER_FEMALE);
+        userInfo.setGender(UserConstant.GENDER_MALE);
         userInfo.setCreateTime(now);
         userDao.addUserInfo(userInfo);
     }
@@ -67,6 +70,9 @@ public class UserService {
         return userDao.getUserByPhone(phone);
     }
 
+    /**
+     * 用户登录
+     */
     public String login(User user) throws Exception {
 
         String phone = user.getPhone();
@@ -126,12 +132,15 @@ public class UserService {
         return userDao.getUserInfoByUserIds(userIdList);
     }
 
+    /**
+     * 实际的分页查询方法（查询用户列表）
+     */
     public PageResult<UserInfo> pageListUserInfos(JSONObject params) {
-        //计算在数据中的查询时的起始位置和限制条数(查询多少条数据)
+        //计算在数据中的查询时的起始位置和数据条数(查询多少条数据)
         Integer pageNum = params.getInteger("pageNum");
-        Integer size = params.getInteger("size");
-        params.put("start", (pageNum - 1) * size);
-        params.put("limit", size);
+        Integer pageSize = params.getInteger("pageSize");
+        params.put("pageStart", (pageNum - 1) * pageSize);
+        params.put("pageLimit", pageSize);
         // 先获取符合条件的总记录数
         Integer total = userDao.pageCountUserInfos(params);
         List<UserInfo> list = new ArrayList<>();

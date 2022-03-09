@@ -10,13 +10,17 @@ public class JsonResponse<T> {
     private String msg;
     private T data;
 
-    //用于返回没有数据的结果
+    /**
+     * 用于返回没有数据的结果
+     */
     public JsonResponse(String code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    // 只要有数据可返回，就默认是成功状态
+    /**
+     * 只要有数据可返回，就默认是成功状态
+     */
     public JsonResponse(T data) {
         code = "0";//成功
         msg = "成功";
@@ -25,8 +29,6 @@ public class JsonResponse<T> {
 
     /**
      * 成功，但不返回数据
-     *
-     * @return
      */
     public static JsonResponse<String> success() {
         return new JsonResponse<>(null);
@@ -34,9 +36,6 @@ public class JsonResponse<T> {
 
     /**
      * 成功，返回数据(String，即Json格式)
-     *
-     * @param data
-     * @return
      */
     public static JsonResponse<String> success(String data) {
         return new JsonResponse<>(data);
@@ -44,7 +43,6 @@ public class JsonResponse<T> {
 
     /**
      * 默认的失败返回，没有数据data
-     * @return
      */
     public static JsonResponse<String> fail() {
         return new JsonResponse<>("1", "失败");
@@ -52,9 +50,6 @@ public class JsonResponse<T> {
 
     /**
      * 指定错误码和错误信息的失败返回
-     * @param code
-     * @param msg
-     * @return
      */
     public JsonResponse<String> fail(String code, String msg) {
         return new JsonResponse<>(code, msg);
