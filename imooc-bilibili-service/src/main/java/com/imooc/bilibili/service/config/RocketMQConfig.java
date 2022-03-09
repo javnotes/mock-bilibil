@@ -96,5 +96,4 @@ public class RocketMQConfig {
         consumer.start();
         return consumer;
     }
-
 }
