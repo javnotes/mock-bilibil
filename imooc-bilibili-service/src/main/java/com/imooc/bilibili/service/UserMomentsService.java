@@ -1,4 +1,4 @@
-package com.imooc.service;
+package com.imooc.bilibili.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
