@@ -7,7 +7,7 @@ public interface UserConstant {
 
     public static final String GENDER_UNKNOW = "0";
 
-    public static final String DEFAULT_BIRTH = "1999-10-01";
+    public static final String DEFAULT_BIRTH = "1970-10-01";
 
     public static final String DEFAULT_NICK = "萌新";
 

@@ -27,6 +27,7 @@ public class UserSupport {
         // RequestContextHolder.getRequestAttributes()：框架提供的，抓取请求上下文的方法
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
+
         String token = request.getHeader("token");
         Long userId = TokenUtil.verifyToken(token);
 
@@ -35,5 +36,4 @@ public class UserSupport {
         }
         return userId;
     }
-
 }

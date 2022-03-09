@@ -31,14 +31,13 @@ public class UserApi {
     /**
      * 获取当前登录用户的信息，虽然根据 userId 来获取，但该方法不需要参数，是在token中获取 userId
      **/
-    @GetMapping("/users")
+    @GetMapping("/user")
     public JsonResponse<User> getUserInfo() {
         // 获取当前登录用户
         Long userId = userSupport.getCurrentUserId();
         User user = userService.getUserInfo(userId);
         return new JsonResponse<>(user);
     }
-
 
     @GetMapping("/rsa-pks")
     public JsonResponse<String> getRsaPublicKey() {
@@ -49,7 +48,7 @@ public class UserApi {
     /**
      * 注册
      */
-    @PostMapping("/users")
+    @PostMapping("/user")
     public JsonResponse<String> addUser(@RequestBody User user) {
         userService.addUser(user);
         return JsonResponse.success();
@@ -77,7 +76,7 @@ public class UserApi {
     }
 
     /**
-     * 分页查询用户列表
+     * 分页查询用户（UP主）列表
      * 方法参数：当前页码、每页展示的数据条数、用户昵称（可用于模糊查询）
      * 专门用于封装分页查询的结果
      */
@@ -90,12 +89,13 @@ public class UserApi {
         params.put("pageSize", pageSize);
         params.put("nick", nick);
         params.put("userId", userId);
+        //pageListUserInfos 实际执行分页查询
         PageResult<UserInfo> result = userService.pageListUserInfos(params);
         if (result.getTotal() > 0) {
+            // 查询该页中的用户，是否关注了
             List<UserInfo> checkUserInfoList = userFollowingService.checkFollowingStatus(result.getList(), userId);
             result.setList(checkUserInfoList);
         }
         return new JsonResponse<>(result);
-
     }
 }
