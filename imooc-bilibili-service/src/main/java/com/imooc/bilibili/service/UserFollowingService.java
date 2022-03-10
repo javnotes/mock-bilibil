@@ -33,6 +33,9 @@ public class UserFollowingService {
     private UserService userService;
 
     @Transactional
+    /**
+     * 关注某位用户（UP主）
+     */
     public void addUserFollowing(UserFollowing userFollowing) {
         // 将关注的up主保存至该分组
         Long groupId = userFollowing.getGroupId();
@@ -47,7 +50,7 @@ public class UserFollowingService {
                 throw new ConditionException("分组不存在");
             }
         }
-        // 获取关注的up主
+        // 根据前端中UP主的Id，在后端中查找要关注的up主账号
         Long followingId = userFollowing.getFollowingId();
         User user = userService.getUserById(followingId);
         if (user == null) {
@@ -60,15 +63,15 @@ public class UserFollowingService {
     }
 
     /**
-     * 获取用户的关注的UP主
-     * 1.获取关注的用户列表(根据userId查询该用户关注了哪些UP主，得到集合list，在提取UP主的userId至集合followingIdSet)
-     * 2.根据关注用户的id查询关注用户的基本信息
-     * 3.将关注用户按关注分组进行分类
+     * 获取用户的关注的用户信息（UP主）
+     * 1.获取UP主列表(根据userId查询该用户关注了哪些UP主，得到集合upsList，在提取UP主的userId至集合followingIdSet)
+     * 2.根据UP主id查询关注用户的基本信息
+     * 3.将UP主按关注分组进行分类
      */
     public List<FollowingGroup> getUserFollowings(Long userId) {
-        //list保存了用户关注了哪些UP主，关注一个UP主，就是一个UserFollowing记录
-        List<UserFollowing> list = userFollowingDao.getUserFollowings(userId);
-        Set<Long> followingIdSet = list.stream().map(UserFollowing::getFollowingId).collect(Collectors.toSet());
+        //upsList保存了用户关注了哪些UP主，关注一个UP主，就是一个UserFollowing记录
+        List<UserFollowing> upsList = userFollowingDao.getUserFollowings(userId);
+        Set<Long> followingIdSet = upsList.stream().map(UserFollowing::getFollowingId).collect(Collectors.toSet());
         // 关注的UP主们的信息
         List<UserInfo> userInfoList = new ArrayList<>();
         if (followingIdSet.size() > 0) {
@@ -77,7 +80,7 @@ public class UserFollowingService {
         }
 
         //把UP主的userId与其用户信息对应上
-        for (UserFollowing userFollowing : list) {
+        for (UserFollowing userFollowing : upsList) {
             for (UserInfo userInfo : userInfoList) {
                 if (userFollowing.getUserId().equals(userInfo.getUserId())) {
                     userFollowing.setUserInfo(userInfo);
@@ -87,7 +90,7 @@ public class UserFollowingService {
 
         // 用户用户的关注分组有哪些
         List<FollowingGroup> groupList = followingGroupService.getByUserId(userId);
-        //全部关注，由保存在数据表中的各个分组聚合而成
+        //全部关注，由保存在数据表中的各个关注分组相加而成
         FollowingGroup allGroup = new FollowingGroup();
         allGroup.setName(UserConstant.USER_FOLLOWING_GROUP_ALL_NAME);
         allGroup.setFollowingUserInfoList(userInfoList);
@@ -99,7 +102,7 @@ public class UserFollowingService {
         for (FollowingGroup group : groupList) {
             //该分组group中保存哪些UP主
             List<UserInfo> infoList = new ArrayList<>();
-            for (UserFollowing userFollowing : list) {
+            for (UserFollowing userFollowing : upsList) {
                 if (group.getId().equals(userFollowing.getGroupId())) {
                     infoList.add(userFollowing.getUserInfo());
                 }
@@ -160,6 +163,9 @@ public class UserFollowingService {
         return followingGroupService.getUserFollowingGroups(userId);
     }
 
+    /**
+     * 查询该批用户中，是否已经关注了
+     */
     public List<UserInfo> checkFollowingStatus(List<UserInfo> userInfoList, Long userId) {
         //已关注的UP主
         List<UserFollowing> userFollowingList = userFollowingDao.getUserFollowings(userId);

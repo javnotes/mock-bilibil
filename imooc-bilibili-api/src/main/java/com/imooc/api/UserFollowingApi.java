@@ -6,7 +6,10 @@ import com.imooc.bilibili.domain.JsonResponse;
 import com.imooc.bilibili.domain.UserFollowing;
 import com.imooc.bilibili.service.UserFollowingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,7 +22,6 @@ public class UserFollowingApi {
 
     @Autowired
     private UserFollowingService userFollowingService;
-
     @Autowired
     private UserSupport userSupport;
 
@@ -35,7 +37,7 @@ public class UserFollowingApi {
     }
 
     /**
-     * 获取关注的UP主，并分组展示
+     * 获取关注的UP主，并根据关注的分组进行展示
      */
     @PostMapping("user-followings")
     public JsonResponse<List<FollowingGroup>> getUserFollowings() {
@@ -55,8 +57,7 @@ public class UserFollowingApi {
     }
 
     /**
-     * 增加关注分组
-     * 新建分组后，把分组Id回传至前端
+     * 增加关注分组，并将新增分组的Id回传至前端
      */
     @PostMapping("/user-following-groups")
     public JsonResponse<Long> addUserFollowingGroups(@RequestBody FollowingGroup followingGroup) {
@@ -67,7 +68,7 @@ public class UserFollowingApi {
     }
 
     /**
-     * 获取用户关注分组
+     * 获取用户关注的分组
      */
     @GetMapping("/user-following-groups")
     public JsonResponse<List<FollowingGroup>> getUserFollowingGroups() {
