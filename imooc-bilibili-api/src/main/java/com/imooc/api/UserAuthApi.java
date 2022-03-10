@@ -19,11 +19,14 @@ public class UserAuthApi {
     @Autowired
     private UserAuthService userAuthService;
 
+    /**
+     * 获取用户的所有权限
+     */
     @GetMapping("/user-authorities")
     public JsonResponse<UserAuthorities> getUserAuthorities() {
         Long userId = userSupport.getCurrentUserId();
         UserAuthorities userAuthorities = userAuthService.getUserAuthorities(userId);
-
+        return new JsonResponse<>(userAuthorities);
     }
 
 

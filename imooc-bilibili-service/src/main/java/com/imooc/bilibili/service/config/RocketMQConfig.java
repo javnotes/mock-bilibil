@@ -6,7 +6,6 @@ import com.imooc.bilibili.domain.UserFollowing;
 import com.imooc.bilibili.domain.UserMoment;
 import com.imooc.bilibili.domain.constant.UserMomentsConstant;
 import com.imooc.bilibili.service.UserFollowingService;
-import io.netty.util.internal.StringUtil;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -82,7 +81,7 @@ public class RocketMQConfig {
                     // 在Redis中查找key
                     String subscribedListStr = redisTemplate.opsForValue().get(key);
                     List<UserMoment> subscribedList;
-                    if (StringUtil.isNullOrEmpty(subscribedListStr)) {
+                    if (subscribedListStr == null || subscribedListStr.isEmpty()) {
                         subscribedList = new ArrayList<>();
                     } else {
                         subscribedList = JSONArray.parseArray(subscribedListStr, UserMoment.class);
