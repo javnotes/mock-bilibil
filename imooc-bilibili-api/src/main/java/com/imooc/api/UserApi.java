@@ -92,7 +92,7 @@ public class UserApi {
         //pageListUserInfos 实际执行分页查询
         PageResult<UserInfo> result = userService.pageListUserInfos(params);
         if (result.getTotal() > 0) {
-            // 查询该页中的用户，是否关注了
+            // 查询该页中的用户，是否已经关注了
             List<UserInfo> checkUserInfoList = userFollowingService.checkFollowingStatus(result.getList(), userId);
             result.setList(checkUserInfoList);
         }
