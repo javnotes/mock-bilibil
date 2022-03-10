@@ -1,7 +1,9 @@
 package com.imooc.bilibili.service;
 
+import com.imooc.bilibili.dao.AuthRoleMenuDao;
 import com.imooc.bilibili.domain.auth.AuthRole;
 import com.imooc.bilibili.domain.auth.AuthRoleMenu;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +16,14 @@ import java.util.Set;
  **/
 @Service
 public class AuthRoleMenuService {
-    public List<AuthRoleMenu> getRoleMenusByRoleIds(Set<Long> roleIdSet) {
-        
+    @Autowired
+    private AuthRoleMenuDao authRoleMenuDao;
+
+    public List<AuthRoleMenu> getAuthRoleMenusByRoleIds(Set<Long> getRoleMenusByRoleIds) {
+        return authRoleMenuDao.getAuthRoleMenusByRoleIds(getRoleMenusByRoleIds);
     }
 
-    public AuthRole getRoleByCode(String code) {
+    public AuthRole getAuthRoleByCode(String code) {
+        return authRoleMenuDao.getAuthRoleByCode(code);
     }
 }

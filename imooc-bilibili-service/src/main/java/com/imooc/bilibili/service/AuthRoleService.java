@@ -22,16 +22,16 @@ public class AuthRoleService {
     @Autowired
     private AuthRoleMenuService authRoleMenuService;
 
-    public List<AuthRoleElementOperation> getRoleElementOperationsByRoleIds(Set<Long> roleIdSet) {
-         return authRoleElementOperationService.getRoleElementOperationsByRoleIds(roleIdSet);
+    public List<AuthRoleElementOperation> getAuthRoleElementOperationsByRoleIds(Set<Long> roleIdSet) {
+         return authRoleElementOperationService.getAuthRoleElementOperationsByRoleIds(roleIdSet);
     }
 
 
-    public List<AuthRoleMenu> getRoleMenusByRoleIds(Set<Long> roleIdSet) {
-        return authRoleMenuService.getRoleMenusByRoleIds(roleIdSet);
+    public List<AuthRoleMenu> getAuthRoleMenusByRoleIds(Set<Long> roleIdSet) {
+        return authRoleMenuService.getAuthRoleMenusByRoleIds(roleIdSet);
     }
 
     public AuthRole getRoleByCode(String code) {
-        return authRoleMenuService.getRoleByCode(code);
+        return authRoleMenuService.getAuthRoleByCode(code);
     }
 }

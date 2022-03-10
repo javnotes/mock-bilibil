@@ -29,8 +29,8 @@ public class UserAuthService {
         List<UserRole> userRoleList = userRoleService.getUserRolesByUserId(userId);
         // 该用户所有角色的id
         Set<Long> roleIdSet = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
-        List<AuthRoleElementOperation> roleElementOperationList = authRoleService.getRoleElementOperationsByRoleIds(roleIdSet);
-        List<AuthRoleMenu> roleMenuList = authRoleService.getRoleMenusByRoleIds(roleIdSet);
+        List<AuthRoleElementOperation> roleElementOperationList = authRoleService.getAuthRoleElementOperationsByRoleIds(roleIdSet);
+        List<AuthRoleMenu> roleMenuList = authRoleService.getAuthRoleMenusByRoleIds(roleIdSet);
 
         UserAuthorities userAuthorities = new UserAuthorities();
         userAuthorities.setRoleElementOperationList(roleElementOperationList);
