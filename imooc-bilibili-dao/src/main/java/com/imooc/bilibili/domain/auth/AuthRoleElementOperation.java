@@ -13,7 +13,7 @@ public class AuthRoleElementOperation {
     private Date createTime;
     
     /**
-     * 冗余字段，通过联表查询赋值
+     * 冗余字段，通过联表查询来对该属性进行赋值
      */
     private AuthElementOperation authElementOperation;
 

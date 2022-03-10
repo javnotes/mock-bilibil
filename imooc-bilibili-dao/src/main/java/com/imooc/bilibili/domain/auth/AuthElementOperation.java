@@ -2,6 +2,10 @@ package com.imooc.bilibili.domain.auth;
 
 import java.util.Date;
 
+/**
+ * 页面元素操作
+ * @author luf
+ */
 public class AuthElementOperation {
 
     private Long id;
