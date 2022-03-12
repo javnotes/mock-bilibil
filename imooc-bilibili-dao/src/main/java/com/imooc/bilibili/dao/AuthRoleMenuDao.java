@@ -11,5 +11,5 @@ import java.util.Set;
 public interface AuthRoleMenuDao {
     List<AuthRoleMenu> getAuthRoleMenusByRoleIds(Set<Long> getRoleMenusByRoleIds);
 
-    AuthRole getAuthRoleByCode(String code);
+    //AuthRole getAuthRoleByCode(String code);
 }

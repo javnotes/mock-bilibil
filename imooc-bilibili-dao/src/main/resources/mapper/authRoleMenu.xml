@@ -7,21 +7,20 @@
     <resultMap id="AuthRoleMenuResultMap" type="com.imooc.bilibili.domain.auth.AuthRoleMenu">
         <id column="id" property="id"/>
         <id column="roleId" property="roleId"/>
-        <id column="elementOperationId" property="elementOperationId"/>
-        <association property="authElementOperation" javaType="com.imooc.bilibili.domain.auth.AuthElementOperation">
-            <id column="elementName" property="elementName"/>
-            <id column="elementCode" property="elementCode"/>
+        <id column="menuId" property="menuId"/>
+        <association property="authMenu" javaType="com.imooc.bilibili.domain.auth.AuthMenu">
+            <id column="name" property="name"/>
+            <id column="code" property="code"/>
         </association>
     </resultMap>
-    <select id="getAuthRoleElementOperationsByRoleIds" parameterType="java.util.Set"
-            resultMap="AuthElementOperationResultMap">
-        select areo.*,
-            aeo.elementName,
-            aeo.elementCode,
-            aeo.operationType
-        from t_auth_role_element_operation areo
-        left join t_auth_element_operation aeo on areo.elementOperationId = aeo.id
-        where arro.roleId in
+    <select id="getAuthRoleMenusByRoleIds" parameterType="java.util.Set"
+            resultMap="AuthRoleMenuResultMap">
+        select arm.*,
+        am.name,
+        am.code
+        from t_auth_role_menu arm
+        left join t_auth_menu am on arm.menuId = am.id
+        where arm.roleId in
         <foreach collection="roleIdSet" item="roleId" index="index" open="(" close=")" separator=",">
             #{roleId}
         </foreach>

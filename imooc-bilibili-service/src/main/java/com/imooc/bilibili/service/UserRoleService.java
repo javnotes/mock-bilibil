@@ -18,7 +18,7 @@ public class UserRoleService {
     @Autowired
     private UserRoleDao userRoleDao;
 
-    public List<UserRole> getUserRolesByUserId(Long userId) {
-        return userRoleDao.getUserRolesByUserId(userId);
+    public List<UserRole> getUserRoleByUserId(Long userId) {
+        return userRoleDao.getUserRoleByUserId(userId);
     }
 }

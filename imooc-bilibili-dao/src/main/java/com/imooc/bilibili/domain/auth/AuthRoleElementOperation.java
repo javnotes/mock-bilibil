@@ -2,6 +2,9 @@ package com.imooc.bilibili.domain.auth;
 
 import java.util.Date;
 
+/**
+ * 角色-页面元素关联表：关联角色role与页面元素操作lementOperation，冗余字段AuthElementOperation
+ */
 public class AuthRoleElementOperation {
 
     private Long id;

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 角色-权限相关服务，如查询角色对应有哪些权限
+ * 角色-权限相关服务，如查询角色对应的所有权限
  * @author luf
  * @date 2022/03/10 01:05
  **/
@@ -31,7 +31,7 @@ public class AuthRoleService {
         return authRoleMenuService.getAuthRoleMenusByRoleIds(roleIdSet);
     }
 
-    public AuthRole getRoleByCode(String code) {
-        return authRoleMenuService.getAuthRoleByCode(code);
-    }
+    //public AuthRole getRoleByCode(String code) {
+    //    return authRoleMenuService.getAuthRoleByCode(code);
+    //}
 }

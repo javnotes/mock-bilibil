@@ -26,10 +26,12 @@ public class UserAuthService {
 
     public UserAuthorities getUserAuthorities(Long userId) {
         //一个用户可以有多种角色，通过用户Id查询该用户有哪些角色
-        List<UserRole> userRoleList = userRoleService.getUserRolesByUserId(userId);
-        // 该用户所有角色的id
+        List<UserRole> userRoleList = userRoleService.getUserRoleByUserId(userId);
+        // 该用户所有角色的id，roleId
         Set<Long> roleIdSet = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
+        //根据roleId查询页面级的访问权限
         List<AuthRoleElementOperation> roleElementOperationList = authRoleService.getAuthRoleElementOperationsByRoleIds(roleIdSet);
+        //根据roleId查询页面菜单按钮的操作权限
         List<AuthRoleMenu> roleMenuList = authRoleService.getAuthRoleMenusByRoleIds(roleIdSet);
 
         UserAuthorities userAuthorities = new UserAuthorities();
