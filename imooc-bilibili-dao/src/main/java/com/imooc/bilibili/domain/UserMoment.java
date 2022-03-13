@@ -3,6 +3,7 @@ package com.imooc.bilibili.domain;
 import java.util.Date;
 
 /**
+ * 用户动态
  * @author luf
  */
 public class UserMoment {
