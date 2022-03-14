@@ -1,10 +1,8 @@
 package com.imooc.bilibili.service;
 
 import com.imooc.bilibili.dao.UserAuthDao;
-import com.imooc.bilibili.domain.auth.AuthRoleElementOperation;
-import com.imooc.bilibili.domain.auth.AuthRoleMenu;
-import com.imooc.bilibili.domain.auth.UserAuthorities;
-import com.imooc.bilibili.domain.auth.UserRole;
+import com.imooc.bilibili.domain.auth.*;
+import com.imooc.bilibili.domain.constant.AuthRoleConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +22,7 @@ public class UserAuthService {
     @Autowired
     private AuthRoleService authRoleService;
 
+
     public UserAuthorities getUserAuthorities(Long userId) {
         //一个用户可以有多种角色，通过用户Id查询该用户有哪些角色
         List<UserRole> userRoleList = userRoleService.getUserRoleByUserId(userId);
@@ -38,5 +37,17 @@ public class UserAuthService {
         userAuthorities.setRoleElementOperationList(roleElementOperationList);
         userAuthorities.setRoleMenuList(roleMenuList);
         return userAuthorities;
+    }
+
+    /**
+     * 添加用户默认权限角色
+     */
+    public void addUserDefaultRole(Long userId) {
+        UserRole userRole = new UserRole();
+        //查询默认角色Id
+        AuthRole role = authRoleService.getRoleByCode(AuthRoleConstant.ROLE_LV0);
+        userRole.setUserId(userId);
+        userRole.setRoleId(role.getId());
+        userRoleService.addUserRole(userRole);
     }
 }

@@ -31,7 +31,7 @@ public class UserApi {
     /**
      * 获取当前登录用户的信息，虽然根据 userId 来获取，但该方法不需要参数，是在token中获取 userId
      **/
-    @GetMapping("/user")
+    @GetMapping("/users")
     public JsonResponse<User> getUserInfo() {
         // 获取当前登录用户
         Long userId = userSupport.getCurrentUserId();
@@ -48,7 +48,7 @@ public class UserApi {
     /**
      * 注册
      */
-    @PostMapping("/user")
+    @PostMapping("/users")
     public JsonResponse<String> addUser(@RequestBody User user) {
         userService.addUser(user);
         return JsonResponse.success();

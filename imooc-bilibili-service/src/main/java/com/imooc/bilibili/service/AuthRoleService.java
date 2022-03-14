@@ -1,5 +1,6 @@
 package com.imooc.bilibili.service;
 
+import com.imooc.bilibili.dao.AuthRoleDao;
 import com.imooc.bilibili.domain.auth.AuthRole;
 import com.imooc.bilibili.domain.auth.AuthRoleElementOperation;
 import com.imooc.bilibili.domain.auth.AuthRoleMenu;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 /**
  * 角色-权限相关服务，如查询角色对应的所有权限
+ *
  * @author luf
  * @date 2022/03/10 01:05
  **/
@@ -21,9 +23,12 @@ public class AuthRoleService {
     private AuthRoleElementOperationService authRoleElementOperationService;
     @Autowired
     private AuthRoleMenuService authRoleMenuService;
+    @Autowired
+    private AuthRoleDao authRoleDao;
+
 
     public List<AuthRoleElementOperation> getAuthRoleElementOperationsByRoleIds(Set<Long> roleIdSet) {
-         return authRoleElementOperationService.getAuthRoleElementOperationsByRoleIds(roleIdSet);
+        return authRoleElementOperationService.getAuthRoleElementOperationsByRoleIds(roleIdSet);
     }
 
 
@@ -31,7 +36,7 @@ public class AuthRoleService {
         return authRoleMenuService.getAuthRoleMenusByRoleIds(roleIdSet);
     }
 
-    //public AuthRole getRoleByCode(String code) {
-    //    return authRoleMenuService.getAuthRoleByCode(code);
-    //}
+    public AuthRole getRoleByCode(String code) {
+        return authRoleDao.getRoleByCode(code);
+    }
 }

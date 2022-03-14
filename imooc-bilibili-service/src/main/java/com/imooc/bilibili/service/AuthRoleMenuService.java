@@ -22,6 +22,9 @@ public class AuthRoleMenuService {
     public List<AuthRoleMenu> getAuthRoleMenusByRoleIds(Set<Long> getRoleMenusByRoleIds) {
         return authRoleMenuDao.getAuthRoleMenusByRoleIds(getRoleMenusByRoleIds);
     }
+
+    public AuthRole getAuthRoleByCode(String code) {
+    }
     //
     //public AuthRole getAuthRoleByCode(String code) {
     //    return authRoleMenuDao.getAuthRoleByCode(code);

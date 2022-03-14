@@ -28,7 +28,12 @@ public class UserService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private UserAuthService userAuthService;
 
+    /**
+     * 用户注册，指定默认角色
+     */
     public void addUser(User user) {
         String phone = user.getPhone();
         if (StringUtils.isNullOrEmpty(phone)) {
@@ -64,6 +69,8 @@ public class UserService {
         userInfo.setGender(UserConstant.GENDER_MALE);
         userInfo.setCreateTime(now);
         userDao.addUserInfo(userInfo);
+        //添加新用户的默认角色权限
+        userAuthService.addUserDefaultRole(user.getId());
     }
 
     User getUserByPhone(String phone) {
