@@ -23,8 +23,8 @@ public class AuthRoleMenuService {
         return authRoleMenuDao.getAuthRoleMenusByRoleIds(getRoleMenusByRoleIds);
     }
 
-    public AuthRole getAuthRoleByCode(String code) {
-    }
+//    public AuthRole getAuthRoleByCode(String code) {
+//    }
     //
     //public AuthRole getAuthRoleByCode(String code) {
     //    return authRoleMenuDao.getAuthRoleByCode(code);

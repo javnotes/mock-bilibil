@@ -10,6 +10,6 @@ import java.util.Set;
 @Mapper
 public interface AuthRoleElementOperationDao {
 
-    List<AuthRoleElementOperation> getAuthRoleElementOperationsByRoleIds(@Param("roleIdSet")Set<Long> roleIdSet);
+    List<AuthRoleElementOperation> getRoleElementOperationsByRoleIds(@Param("roleIdSet")Set<Long> roleIdSet);
 
 }

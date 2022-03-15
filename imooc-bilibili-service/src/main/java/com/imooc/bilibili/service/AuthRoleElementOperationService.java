@@ -18,8 +18,8 @@ public class AuthRoleElementOperationService {
     @Autowired
     private AuthRoleElementOperationDao authRoleElementOperationDao;
 
-    public List<AuthRoleElementOperation> getAuthRoleElementOperationsByRoleIds(Set<Long> roleIdSet) {
-        return authRoleElementOperationDao.getAuthRoleElementOperationsByRoleIds(roleIdSet);
+    public List<AuthRoleElementOperation> getRoleElementOperationsByRoleIds(Set<Long> roleIdSet) {
+        return authRoleElementOperationDao.getRoleElementOperationsByRoleIds(roleIdSet);
 
     }
 }

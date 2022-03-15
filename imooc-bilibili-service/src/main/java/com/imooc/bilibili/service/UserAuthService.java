@@ -29,7 +29,7 @@ public class UserAuthService {
         // 该用户所有角色的id，roleId
         Set<Long> roleIdSet = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toSet());
         //根据roleId查询页面级的访问权限
-        List<AuthRoleElementOperation> roleElementOperationList = authRoleService.getAuthRoleElementOperationsByRoleIds(roleIdSet);
+        List<AuthRoleElementOperation> roleElementOperationList = authRoleService.getRoleElementOperationsByRoleIds(roleIdSet);
         //根据roleId查询页面菜单按钮的操作权限
         List<AuthRoleMenu> roleMenuList = authRoleService.getAuthRoleMenusByRoleIds(roleIdSet);
 
@@ -39,15 +39,15 @@ public class UserAuthService {
         return userAuthorities;
     }
 
-    /**
-     * 添加用户默认权限角色
-     */
-    public void addUserDefaultRole(Long userId) {
-        UserRole userRole = new UserRole();
-        //查询默认角色Id
-        AuthRole role = authRoleService.getRoleByCode(AuthRoleConstant.ROLE_LV0);
-        userRole.setUserId(userId);
-        userRole.setRoleId(role.getId());
-        userRoleService.addUserRole(userRole);
-    }
+/**
+ * 添加用户默认权限角色
+ */
+//    public void addUserDefaultRole(Long userId) {
+//        UserRole userRole = new UserRole();
+//        //查询默认角色Id
+//        AuthRole role = authRoleService.getRoleByCode(AuthRoleConstant.ROLE_LV0);
+//        userRole.setUserId(userId);
+//        userRole.setRoleId(role.getId());
+//        userRoleService.addUserRole(userRole);
+//    }
 }

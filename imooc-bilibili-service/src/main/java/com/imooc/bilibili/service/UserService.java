@@ -70,7 +70,7 @@ public class UserService {
         userInfo.setCreateTime(now);
         userDao.addUserInfo(userInfo);
         //添加新用户的默认角色权限
-        userAuthService.addUserDefaultRole(user.getId());
+       // userAuthService.addUserDefaultRole(user.getId());
     }
 
     User getUserByPhone(String phone) {
