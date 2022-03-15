@@ -18,6 +18,9 @@ public class UserRoleService {
     @Autowired
     private UserRoleDao userRoleDao;
 
+    /**
+     * 获取用户绑定的角色，通过userId
+     */
     public List<UserRole> getUserRoleByUserId(Long userId) {
         return userRoleDao.getUserRoleByUserId(userId);
     }

@@ -32,7 +32,7 @@ public class UserMomentsApi {
      * 新增用户动态
      * 用户a发布动态后，关注了a的用户b，就可以看到a的动态
      *
-     * @ApiLimitedRole：基于Api进行权限控制
+     * @ApiLimitedRole：基于Api进行权限控制，AuthRoleConstant.ROLE_LV0不允许发送动态
      * @DataLimited：基于数据进行权限控制。切入方法，获取所有参数，循环遍历，如果有指定对象实例，在对实例属性进行检查
      */
     @ApiLimitedRole(limitedRoleCodeList = {AuthRoleConstant.ROLE_LV0})

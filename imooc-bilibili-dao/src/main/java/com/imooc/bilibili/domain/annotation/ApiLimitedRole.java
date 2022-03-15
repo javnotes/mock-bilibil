@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import java.lang.annotation.*;
 
 /**
+ * 针对角色的接口权限
  * @author luf
  */
 @Retention(RetentionPolicy.RUNTIME)

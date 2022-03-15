@@ -3,7 +3,7 @@ package com.imooc.bilibili.domain.auth;
 import java.util.List;
 
 /**
- * 存放某一角色对应的所有权限
+ * 存放角色对应的所有权限
  */
 public class UserAuthorities {
 

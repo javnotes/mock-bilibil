@@ -20,6 +20,5 @@ public class AuthRoleElementOperationService {
 
     public List<AuthRoleElementOperation> getRoleElementOperationsByRoleIds(Set<Long> roleIdSet) {
         return authRoleElementOperationDao.getRoleElementOperationsByRoleIds(roleIdSet);
-
     }
 }

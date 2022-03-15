@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * 用户权限相关的Api
  * @author luf
  * @date 2022/03/09 20:58
  **/
@@ -20,7 +21,7 @@ public class UserAuthApi {
     private UserAuthService userAuthService;
 
     /**
-     * 获取用户的所有权限
+     * 获取当前用户的所拥有的所有权限
      */
     @GetMapping("/user-authorities")
     public JsonResponse<UserAuthorities> getUserAuthorities() {
@@ -28,6 +29,4 @@ public class UserAuthApi {
         UserAuthorities userAuthorities = userAuthService.getUserAuthorities(userId);
         return new JsonResponse<>(userAuthorities);
     }
-
-
 }

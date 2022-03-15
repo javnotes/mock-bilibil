@@ -19,8 +19,8 @@ public class AuthRoleMenuService {
     @Autowired
     private AuthRoleMenuDao authRoleMenuDao;
 
-    public List<AuthRoleMenu> getAuthRoleMenusByRoleIds(Set<Long> getRoleMenusByRoleIds) {
-        return authRoleMenuDao.getAuthRoleMenusByRoleIds(getRoleMenusByRoleIds);
+    public List<AuthRoleMenu> getAuthRoleMenusByRoleIds(Set<Long> roleIdSet) {
+        return authRoleMenuDao.getAuthRoleMenusByRoleIds(roleIdSet);
     }
 
 //    public AuthRole getAuthRoleByCode(String code) {

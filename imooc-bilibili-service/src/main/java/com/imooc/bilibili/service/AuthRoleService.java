@@ -35,8 +35,8 @@ public class AuthRoleService {
     public List<AuthRoleMenu> getAuthRoleMenusByRoleIds(Set<Long> roleIdSet) {
         return authRoleMenuService.getAuthRoleMenusByRoleIds(roleIdSet);
     }
-
-    public AuthRole getRoleByCode(String code) {
-        return authRoleDao.getRoleByCode(code);
-    }
+    //
+    //public AuthRole getRoleByCode(String code) {
+    //    return authRoleDao.getRoleByCode(code);
+    //}
 }

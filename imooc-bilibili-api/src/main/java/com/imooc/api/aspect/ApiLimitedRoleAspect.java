@@ -19,16 +19,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 1.获取userId 2.获取用户角色role 3.
  * @author luf
  * @date 2022/03/13 08:57
  **/
 @Order(1)
 @Component
 @Aspect
-/**
- *
- * 1.获取userId 2.获取用户角色role
- */
 public class ApiLimitedRoleAspect {
     @Autowired
     private UserSupport userSupport;
@@ -36,7 +33,7 @@ public class ApiLimitedRoleAspect {
     private UserRoleService userRoleService;
 
     /**
-     * 切点：告诉SpringBoot在什么时候切入，注解被执行时
+     * 切点：告诉SpringBoot在注解被执行时候切入
      */
     @Pointcut("@annotation(com.imooc.bilibili.domain.annotation.ApiLimitedRole)")
     public void check() {
@@ -45,8 +42,8 @@ public class ApiLimitedRoleAspect {
     // 切点切入后的执行逻辑
 
     /**
-     * 需要获取到切面中获取到自定义的注解，以用来获取到受限制的角色列表
      * 1.检查角色是否有权限操作接口，通过受限制的角色列表来检查
+     * @annotation(apiLimitedRole)：需要获取到切面中获取到自定义的注解，以用来获取到传入的受限制的角色列表
      */
     @Before("check() && @annotation(apiLimitedRole)")
     public void doBefore(JoinPoint joinPoint, ApiLimitedRole apiLimitedRole) {

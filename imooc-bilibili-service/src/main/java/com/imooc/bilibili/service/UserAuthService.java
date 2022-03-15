@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 用户绑定的角色 + 角色对应的权限
  * @author luf
  * @date 2022/03/10 00:55
  **/
@@ -31,11 +32,11 @@ public class UserAuthService {
         //根据roleId查询页面级的访问权限
         List<AuthRoleElementOperation> roleElementOperationList = authRoleService.getRoleElementOperationsByRoleIds(roleIdSet);
         //根据roleId查询页面菜单按钮的操作权限
-        List<AuthRoleMenu> roleMenuList = authRoleService.getAuthRoleMenusByRoleIds(roleIdSet);
+        List<AuthRoleMenu> authRoleMenuList = authRoleService.getAuthRoleMenusByRoleIds(roleIdSet);
 
         UserAuthorities userAuthorities = new UserAuthorities();
         userAuthorities.setRoleElementOperationList(roleElementOperationList);
-        userAuthorities.setRoleMenuList(roleMenuList);
+        userAuthorities.setRoleMenuList(authRoleMenuList);
         return userAuthorities;
     }
 

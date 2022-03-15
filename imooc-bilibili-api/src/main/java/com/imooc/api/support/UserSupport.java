@@ -11,6 +11,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * 获取当前用户的 userId，通过验证 token 的方式
+ *
  * @author luf
  * @date 2022/03/05 11:56
  **/
