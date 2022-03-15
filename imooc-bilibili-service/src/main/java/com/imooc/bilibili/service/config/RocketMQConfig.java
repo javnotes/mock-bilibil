@@ -25,7 +25,7 @@ import java.util.List;
  * @author luf
  * @date 2022/03/07 22:50
  **/
-//@Configuration
+@Configuration
 public class RocketMQConfig {
 
     @Value("${rocketmq.name.server.address}")

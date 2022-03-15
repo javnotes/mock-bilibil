@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 用UserMoment.type进行权限控制
+ * 用动态类型UserMoment.type进行权限控制
  *
  * @author luf
  * @date 2022/03/13 08:57
