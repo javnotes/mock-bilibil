@@ -69,6 +69,7 @@ public class UserService {
         userInfo.setGender(UserConstant.GENDER_MALE);
         userInfo.setCreateTime(now);
         userDao.addUserInfo(userInfo);
+
         //添加新用户的默认角色权限
        // userAuthService.addUserDefaultRole(user.getId());
     }

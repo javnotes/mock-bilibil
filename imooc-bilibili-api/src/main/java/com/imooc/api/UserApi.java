@@ -46,7 +46,7 @@ public class UserApi {
     }
 
     /**
-     * 注册
+     * 用户注册，成功注册会赋以默认角色
      */
     @PostMapping("/users")
     public JsonResponse<String> addUser(@RequestBody User user) {
