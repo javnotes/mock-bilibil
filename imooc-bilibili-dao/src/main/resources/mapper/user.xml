@@ -142,21 +142,21 @@
     <!--          and userId = #{userId}-->
     <!--    </delete>-->
 
-    <!--    <delete id="deleteRefreshTokenByUserId" parameterType="java.lang.Long">-->
-    <!--        delete-->
-    <!--        from t_refresh_token-->
-    <!--        where userId = #{userId}-->
-    <!--    </delete>-->
+    <delete id="deleteRefreshTokenByUserId" parameterType="java.lang.Long">
+        delete
+        from t_refresh_token
+        where userId = #{userId}
+    </delete>
 
 
-    <!--    <insert id="addRefreshToken">-->
-    <!--        insert into t_refresh_token(refreshToken,-->
-    <!--                                    userId,-->
-    <!--                                    createTime)-->
-    <!--        values (#{refreshToken},-->
-    <!--                #{userId},-->
-    <!--                #{createTime})-->
-    <!--    </insert>-->
+    <insert id="addRefreshToken">
+        insert into t_refresh_token(refreshToken,
+                                    userId,
+                                    createTime)
+        values (#{refreshToken},
+                #{userId},
+                #{createTime})
+    </insert>
 
     <!--    <select id="getRefreshTokenDetail" parameterType="java.lang.String"-->
     <!--            resultType="com.imooc.bilibili.domain.RefreshTokenDetail">-->

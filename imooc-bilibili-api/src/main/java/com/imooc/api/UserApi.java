@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author luf
@@ -62,6 +63,20 @@ public class UserApi {
         String token = userService.login(user);
         return new JsonResponse<>(token);
     }
+
+    /**
+     * 登录：双token：1.处理用户退出后，token有效的问题 2.在用户无感的情况下，更新token
+     */
+    @PostMapping("/user-dts")
+    public JsonResponse<Map<String, Object>> loginForDts(@RequestBody User user) throws Exception {
+        Map<String, Object> map = userService.loginForDts(user);
+        return new JsonResponse<>(map);
+    }
+
+    /**
+     * 退出登录：删除现有的token
+     */
+
 
     /**
      * 更新用户信息

@@ -14,10 +14,7 @@ import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author luf
@@ -71,7 +68,7 @@ public class UserService {
         userDao.addUserInfo(userInfo);
 
         //添加新用户的默认角色权限
-       // userAuthService.addUserDefaultRole(user.getId());
+        userAuthService.addUserDefaultRole(user.getId());
     }
 
     User getUserByPhone(String phone) {
@@ -157,5 +154,49 @@ public class UserService {
             list = userDao.pageListUserInfos(params);
         }
         return new PageResult<>(total, list);
+    }
+
+    /**
+     * 双token登录
+     *
+     * @param user
+     * @return
+     */
+    public Map<String, Object> loginForDts(User user) throws Exception {
+
+        String phone = user.getPhone();
+        if (StringUtils.isNullOrEmpty(phone)) {
+            throw new ConditionException("手机号不能为空！");
+        }
+        // 验证账号
+        User dbUser = this.getUserByPhone(phone);
+        if (dbUser == null) {
+            throw new ConditionException("当前用户不存在！");
+        }
+        // 验证密码，此时存在前端传来的user，和保存在数据库中的dbUser
+        String password = user.getPassword();
+        String rawPassword;
+        try {
+            rawPassword = RSAUtil.decrypt(password);
+        } catch (Exception e) {
+            throw new ConditionException("密码解析失败！");
+        }
+        // 数据库中保存的是注册时，md5加密后的密码，所以登录时需要将用户填写的密码加密后与数据库中保存的密码去对比验证
+        String salt = dbUser.getSalt();
+        String md5Password = MD5Util.sign(rawPassword, salt, "UTF-8");
+        if (!md5Password.equals(dbUser.getPassword())) {
+            throw new ConditionException("密码错误！");
+        }
+        // 开始双token
+        Long userId = dbUser.getId();
+        String accessToken = TokenUtil.generateToken(userId);
+        String refreshToken = TokenUtil.generateRefreshToken(userId);
+        // 保存 refreshToken 至数据库
+        userDao.deleteRefreshTokenByUserId(userId);
+        userDao.addRefreshToken(refreshToken, userId, new Date());
+        Map<String, Object> result = new HashMap<>();
+        result.put("accessToken", accessToken);
+        result.put("refreshToken", refreshToken);
+        return result;
     }
 }

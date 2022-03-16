@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * 用户绑定的角色 + 角色对应的权限
+ *
  * @author luf
  * @date 2022/03/10 00:55
  **/
@@ -40,15 +41,16 @@ public class UserAuthService {
         return userAuthorities;
     }
 
-/**
- * 添加用户默认权限角色
- */
-//    public void addUserDefaultRole(Long userId) {
-//        UserRole userRole = new UserRole();
-//        //查询默认角色Id
-//        AuthRole role = authRoleService.getRoleByCode(AuthRoleConstant.ROLE_LV0);
-//        userRole.setUserId(userId);
-//        userRole.setRoleId(role.getId());
-//        userRoleService.addUserRole(userRole);
-//    }
+    /**
+     * 添加用户默认权限角色
+     */
+    public void addUserDefaultRole(Long userId) {
+        UserRole userRole = new UserRole();
+        //根据默认角色的编码，查询默认角色Id
+        AuthRole role = authRoleService.getRoleByCode(AuthRoleConstant.ROLE_LV0);
+        //赋值userRole
+        userRole.setUserId(userId);
+        userRole.setRoleId(role.getId());
+        userRoleService.addUserRole(userRole);
+    }
 }
