@@ -3,6 +3,7 @@ package com.imooc.bilibili.service;
 import com.alibaba.fastjson.JSONObject;
 import com.imooc.bilibili.dao.UserDao;
 import com.imooc.bilibili.domain.PageResult;
+import com.imooc.bilibili.domain.RefreshTokenDetail;
 import com.imooc.bilibili.domain.User;
 import com.imooc.bilibili.domain.UserInfo;
 import com.imooc.bilibili.domain.constant.UserConstant;
@@ -198,5 +199,24 @@ public class UserService {
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
+    }
+
+    /**
+     * 用户退出：删除该用户的refreshToken
+     */
+    public void logout(String refreshToken, Long userId) {
+        userDao.deleteRefreshToken(refreshToken, userId);
+    }
+
+    /**
+     * 根据（数据库中的）refreshToken（中的userId）来重新生成accessToken
+     */
+    public String refreshAccessToken(String refreshToken) throws Exception {
+        RefreshTokenDetail refreshTokenDetail = userDao.getRefreshTokenDetail(refreshToken);
+        if (refreshTokenDetail == null) {
+            throw new ConditionException("555", "token过期！");
+        }
+        Long userId = refreshTokenDetail.getUserId();
+        return TokenUtil.generateToken(userId);
     }
 }

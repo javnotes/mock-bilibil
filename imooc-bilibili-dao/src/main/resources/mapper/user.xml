@@ -135,12 +135,12 @@
         limit #{pageStart}, #{pageLimit}
     </select>
 
-    <!--    <delete id="deleteRefreshToken">-->
-    <!--        delete-->
-    <!--        from t_refresh_token-->
-    <!--        where refreshToken = #{refreshToken}-->
-    <!--          and userId = #{userId}-->
-    <!--    </delete>-->
+    <delete id="deleteRefreshToken">
+        delete
+        from t_refresh_token
+        where refreshToken = #{refreshToken}
+          and userId = #userId{}
+    </delete>
 
     <delete id="deleteRefreshTokenByUserId" parameterType="java.lang.Long">
         delete
@@ -158,12 +158,12 @@
                 #{createTime})
     </insert>
 
-    <!--    <select id="getRefreshTokenDetail" parameterType="java.lang.String"-->
-    <!--            resultType="com.imooc.bilibili.domain.RefreshTokenDetail">-->
-    <!--        select *-->
-    <!--        from t_refresh_token-->
-    <!--        where refreshToken = #{refreshToken}-->
-    <!--    </select>-->
+    <select id="getRefreshTokenDetail" parameterType="java.lang.String"
+            resultType="com.imooc.bilibili.domain.RefreshTokenDetail">
+        select *
+        from t_refresh_token
+        where refreshToken = #{refreshToken}
+    </select>
 
     <!--    <select id="getRefreshTokenByUserId" parameterType="java.lang.Long" resultType="java.lang.String">-->
     <!--        select refreshToken-->
