@@ -157,7 +157,8 @@ public class FastDFSUtil {
             //从此文件中读取最多 b.length 个字节的数据到一个字节数组中，返回读入缓冲区的总字节数
             int len = randomAccessFile.read(bytes);
             //分片文件名称
-            String path = tempSliceFilesAddr + count + "." + fileType;
+            //String path = tempSliceFilesAddr + count + "." + fileType;
+            String path = "D:\\mooc-bilibili\\tempFile\\" + count + "." + fileType;
             //String path = "D:\\mooc-bilibili\\tempFile\\" + count + "." + fileType;
             File slice = new File(path);
             FileOutputStream fos = new FileOutputStream(slice);
