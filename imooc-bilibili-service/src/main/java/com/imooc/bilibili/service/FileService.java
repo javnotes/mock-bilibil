@@ -24,11 +24,13 @@ public class FileService {
                                      String fileMD5,
                                      Integer sliceNo,
                                      Integer totalSliceNo) throws Exception {
+        //先去数据库中查询是否已上传过该文件
         File dbFileMD5 = fileDao.getFileByMD5(fileMD5);
         if (dbFileMD5 != null) {
             return dbFileMD5.getUrl();
         }
         String url = fastDFSUtil.uploadFileBySlices(slice, fileMD5, sliceNo, totalSliceNo);
+        // 把上传后的文件信息(md5)保存到数据库中
         if (!StringUtil.isNullOrEmpty(url)) {
             dbFileMD5 = new File();
             dbFileMD5.setCreateTime(new Date());
