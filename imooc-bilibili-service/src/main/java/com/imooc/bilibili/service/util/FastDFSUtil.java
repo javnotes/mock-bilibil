@@ -52,19 +52,16 @@ public class FastDFSUtil {
     private String tempSliceFilesAddr;
 
 
-    /**
-     * 获取文件类型
-     */
-    public String getFileType(MultipartFile file){
-        if(file == null){
+    public String getFileType(MultipartFile file) {
+        if (file == null) {
             throw new ConditionException("非法文件！");
         }
         String fileName = file.getOriginalFilename();
         int index = fileName.lastIndexOf(".");
-        return fileName.substring(index+1);
+        return fileName.substring(index + 1);
     }
 
-    //上传
+    // 上传
     public String uploadCommonFile(MultipartFile file) throws Exception {
         Set<MetaData> metaDataSet = new HashSet<>();
         String fileType = this.getFileType(file);
@@ -74,19 +71,19 @@ public class FastDFSUtil {
 
     public String uploadCommonFile(File file, String fileType) throws Exception {
         Set<MetaData> metaDataSet = new HashSet<>();
-        StorePath storePath = fastFileStorageClient.uploadFile(new FileInputStream(file),
-                file.length(), fileType, metaDataSet);
+        StorePath storePath = fastFileStorageClient.uploadFile(new FileInputStream(file), file.length(), fileType, metaDataSet);
         return storePath.getPath();
     }
 
-    //上传可以断点续传的文件
-    public String uploadAppenderFile(MultipartFile file) throws Exception{
+    // 上传可以断点续传的文件
+    public String uploadAppenderFile(MultipartFile file) throws Exception {
         String fileType = this.getFileType(file);
         StorePath storePath = appendFileStorageClient.uploadAppenderFile(DEFAULT_GROUP, file.getInputStream(), file.getSize(), fileType);
         return storePath.getPath();
     }
 
-    public void modifyAppenderFile(MultipartFile file, String filePath, long offset) throws Exception{
+
+    public void modifyAppenderFile(MultipartFile file, String filePath, long offset) throws Exception {
         appendFileStorageClient.modifyFile(DEFAULT_GROUP, filePath, file.getInputStream(), file.getSize(), offset);
     }
 
@@ -159,14 +156,9 @@ public class FastDFSUtil {
             byte[] bytes = new byte[SLICE_SIZE];
             //从此文件中读取最多 b.length 个字节的数据到一个字节数组中，返回读入缓冲区的总字节数
             int len = randomAccessFile.read(bytes);
-<<<<<<< HEAD
             //分片文件名称
             //String path = tempSliceFilesAddr + count + "." + fileType;
             String path = "D:\\mooc-bilibili\\tempFile\\" + count + "." + fileType;
-=======
-            //分片文件全路径名称
-            String path = tempSliceFilesAddr + count + "." + fileType;
->>>>>>> 41d68f306005501a6ce5cdb2446db778fad78ea0
             //String path = "D:\\mooc-bilibili\\tempFile\\" + count + "." + fileType;
             File slice = new File(path);
             FileOutputStream fos = new FileOutputStream(slice);
