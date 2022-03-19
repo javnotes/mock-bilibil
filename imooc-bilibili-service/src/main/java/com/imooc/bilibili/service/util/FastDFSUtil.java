@@ -35,11 +35,16 @@ public class FastDFSUtil {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    private static final String PATH_KEY = "path-key";
-    private static final String UPLOADED_SIZE_KEY = "uploaded-size-key";
-    private static final String UPLOADED_NO_KEY = "uploaded-no-key";
+    private static final String PATH_KEY = "path-key:";
+
+    private static final String UPLOADED_SIZE_KEY = "uploaded-size-key:";
+
+    private static final String UPLOADED_NO_KEY = "uploaded-no-key:";
+
     private static final String DEFAULT_GROUP = "group1";
+
     private static final int SLICE_SIZE = 1024 * 1024 * 2;
+
 
     @Value("${fdfs.http.storage-addr}")
     private String httpFdfsStorageAddr;
