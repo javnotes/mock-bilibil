@@ -153,6 +153,7 @@ public class FastDFSUtil {
             int len = randomAccessFile.read(bytes);
             //分片文件名称
             String path = tempSliceFilesAddr + count + "." + fileType;
+            //String path = "D:\\mooc-bilibili\\tempFile\\" + count + "." + fileType;
             File slice = new File(path);
             FileOutputStream fos = new FileOutputStream(slice);
             fos.write(bytes, 0, len);
