@@ -5,27 +5,20 @@
 <mapper namespace="com.imooc.bilibili.dao.FileDao">
 
     <insert id="addFile" parameterType="com.imooc.bilibili.domain.File">
-        insert into
-            t_file(
-                url,
-                `type`,
-                md5,
-                createTime
-            )value(
-                #{url},
-                #{type},
-                #{md5},
-                #{createTime}
+        insert into t_file(url,
+                           `type`,
+                           md5,
+                           createTime) value ( #{url},
+            #{type},
+            #{md5},
+            #{createTime}
             )
     </insert>
 
     <select id="getFileByMD5" parameterType="java.lang.String" resultType="com.imooc.bilibili.domain.File">
-        select
-            *
-        from
-            t_file
-        where
-            md5 = #{md5}
+        select *
+        from t_file
+        where md5 = #{md5}
     </select>
 
 </mapper>
