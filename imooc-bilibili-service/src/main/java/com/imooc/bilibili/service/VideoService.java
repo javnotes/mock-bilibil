@@ -3,6 +3,7 @@ package com.imooc.bilibili.service;
 import com.imooc.bilibili.dao.VideoDao;
 import com.imooc.bilibili.domain.PageResult;
 import com.imooc.bilibili.domain.Video;
+import com.imooc.bilibili.domain.VideoLike;
 import com.imooc.bilibili.domain.VideoTag;
 import com.imooc.bilibili.domain.exception.ConditionException;
 import com.imooc.bilibili.service.util.FastDFSUtil;
@@ -87,4 +88,51 @@ public class VideoService {
     }
 
 
+    /**
+     * 点赞视频
+     * 需要检查参数videoId、userId的合法性
+     */
+    public void addVideoLike(Long videoId, Long userId) {
+        Video video = videoDao.getVideoById(videoId);
+        if (video == null) {
+            throw new ConditionException("非法视频！");
+        }
+        VideoLike videoLike = videoDao.getVideoLikeByVideoIdAndUserId(videoId, userId);
+        if (videoLike == null) {
+            throw new ConditionException("已经赞过了！");
+        }
+        videoLike = new VideoLike();
+        videoLike.setVideoId(videoId);
+        videoLike.setUserId(userId);
+        videoLike.setCreateTime(new Date());
+        videoDao.addVideoLike(videoLike);
+    }
+
+    /**
+     * 删除该用户的视频点赞记录(如果有的话)
+     */
+    public void deleteVideoLike(Long videoId, Long userId) {
+        videoDao.deleteVideoLike(videoId, userId);
+    }
+
+    /**
+     * 查询该视频的点赞数
+     * 如果用户已登录，则查询该用户是否已点赞过；
+     * 同时处理游客情形
+     */
+    public Map<String, Object> getVideoLikes(Long videoId, Long userId) {
+        // 查询该视频的点赞数
+        Long count = videoDao.getVideoLikes(videoId);
+
+        // 如果用户已登录，则查询该用户是否已点赞过；
+        // 同时处理游客情形：如果添加VideoLike记录，需要videoId和userId；
+        // 如果用户没登录，则userId为null，自然也就不能查询出记录
+        VideoLike videoLike = videoDao.getVideoLikeByVideoIdAndUserId(videoId, userId);
+        boolean like = videoLike != null; //用户点赞过该视频
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("like", like);
+        return result;
+    }
 }
