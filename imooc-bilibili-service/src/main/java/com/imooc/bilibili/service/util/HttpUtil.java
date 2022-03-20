@@ -81,7 +81,7 @@ public class HttpUtil {
 
 	/**
 	 * http get请求 返回输出流
-	 * @param url 请求链接
+	 * @param url 请求链接，对应文件的路径
 	 * @param headers 请求头
 	 * @param response 响应
 	 */

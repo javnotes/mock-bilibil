@@ -157,8 +157,7 @@ public class FastDFSUtil {
             //从此文件中读取最多 b.length 个字节的数据到一个字节数组中，返回读入缓冲区的总字节数
             int len = randomAccessFile.read(bytes);
             //分片文件名称
-            //String path = tempSliceFilesAddr + count + "." + fileType;
-            String path = "D:\\mooc-bilibili\\tempFile\\" + count + "." + fileType;
+            String path = tempSliceFilesAddr + count + "." + fileType;
             //String path = "D:\\mooc-bilibili\\tempFile\\" + count + "." + fileType;
             File slice = new File(path);
             FileOutputStream fos = new FileOutputStream(slice);
@@ -188,24 +187,42 @@ public class FastDFSUtil {
         fastFileStorageClient.deleteFile(filePath);
     }
 
-
+    /**
+     * 在线观看视频(分片形式)
+     */
     public void viewVideoOnlineBySlices(HttpServletRequest request,
                                         HttpServletResponse response,
                                         String path) throws Exception {
         FileInfo fileInfo = fastFileStorageClient.queryFileInfo(DEFAULT_GROUP, path);
         long totalFileSize = fileInfo.getFileSize();
         String url = httpFdfsStorageAddr + path;
+        // 获取请求头的信息，原封不动地转发到文件服务器
+        // .getHeaderNames：获取所有请求头的参数的名称
         Enumeration<String> headerNames = request.getHeaderNames();
         Map<String, Object> headers = new HashMap<>();
         while (headerNames.hasMoreElements()) {
             String header = headerNames.nextElement();
             headers.put(header, request.getHeader(header));
         }
+
         String rangeStr = request.getHeader("Range");
         String[] range;
         if (StringUtil.isNullOrEmpty(rangeStr)) {
+            //指针位置的范围
             rangeStr = "bytes=0-" + (totalFileSize - 1);
         }
+        /** 如果在一个字符串中有多个分隔符，可以用 “|” 作为连字符
+         *        String str2 = "bytes=452352-34558438593";
+         *         String[] strings = str2.split("bytes=|-");
+         *         System.out.println(strings.length);
+         *         for (String s: strings         ) {
+         *             System.out.println(s);
+         *         }
+         *         3
+         *
+         *         452352
+         *         34558438593
+         */
         range = rangeStr.split("bytes=|-");
         long begin = 0;
         if (range.length >= 2) {

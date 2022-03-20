@@ -24,6 +24,17 @@ public class RSAUtil {
     public static void main(String[] args) throws Exception {
         String str = RSAUtil.encrypt("123456");
         System.out.println(str);
+
+        String str2 = "bytes=452352-34558438593";
+        String[] strings = str2.split("bytes=|-");
+        System.out.println(strings.length);
+        for (String s: strings         ) {
+            System.out.println(s);
+        }
+//        3
+//
+//        452352
+//        34558438593
     }
 
     public static String getPublicKeyStr() {

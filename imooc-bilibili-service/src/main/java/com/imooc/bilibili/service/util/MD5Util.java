@@ -41,14 +41,20 @@ public class MD5Util {
      * 获取文件md5加密后的字符串
      */
     public static String getFileMD5(MultipartFile file) throws Exception {
+        //.getInputStream 输入流，都是对底层流的加工处理
         InputStream fis = file.getInputStream();
+        //输出流
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int byteRead;
+        // fis-->baos，将输入流的内容写到输出流中
+        // fis.read(buffer)：从输入流中读取一些字节并将它们存储到缓冲区数组，实际读取的字节数以整数形式返回
+        // baos.write：从偏移量 off 开始的指定字节数组中写入 len 个字节到此 ByteArrayOutputStream。
         while ((byteRead = fis.read(buffer)) > 0) {
             baos.write(buffer, 0, byteRead);
         }
         fis.close();
         return DigestUtils.md5Hex(baos.toByteArray());
     }
+
 }
