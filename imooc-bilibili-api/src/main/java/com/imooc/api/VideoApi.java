@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @description: TODO 类描述
  * @author: luf
@@ -47,6 +50,27 @@ public class VideoApi {
         PageResult<Video> result = videoService.pageListVideos(size, no, area);
         return new JsonResponse<>(result);
     }
+
+    /**
+     * 在线观看视频，通过分片的形式
+     * 因为是通过流的形式进行文件的传输，所以流会写在HttpResponse中的输出流里。
+     */
+    @GetMapping("/video-slices")
+    public void viewVideoOnlineBySlices(HttpServletRequest request, HttpServletResponse response, String url) {
+        videoService.viewVideoOnlineBySlices(request,response, url);
+
+    }
+
+
+    /**
+     * 点赞视频
+     */
+
+
+
+    /**
+     * 取消视频点赞
+     */
 
 
 }

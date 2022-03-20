@@ -189,22 +189,34 @@ public class FastDFSUtil {
 
     /**
      * 在线观看视频(分片形式)
+     * 因为是通过流的形式进行文件的传输，所以流会写在HttpResponse中的输出流里。
+     *
+     * @param request  需要把前端发送的请求头，原封不动地发送到文件服务器，即请求转发
+     * @param response 需要将获取到的文件流，写入到response中
+     * @param path     相对路径，用于拼接出文件的实际路径
      */
     public void viewVideoOnlineBySlices(HttpServletRequest request,
                                         HttpServletResponse response,
                                         String path) throws Exception {
+        // 根据文件的相对路径path，获取文件信息中的文件大小，用于分片
         FileInfo fileInfo = fastFileStorageClient.queryFileInfo(DEFAULT_GROUP, path);
         long totalFileSize = fileInfo.getFileSize();
+
+        // 拼接出实际的视频访问路径
         String url = httpFdfsStorageAddr + path;
-        // 获取请求头的信息，原封不动地转发到文件服务器
+
+        // request 把前端发送的请求头，原封不动地发送到文件服务器，即请求转发
+        // 需要将获取到的文件流，写入到response中、
         // .getHeaderNames：获取所有请求头的参数的名称
         Enumeration<String> headerNames = request.getHeaderNames();
         Map<String, Object> headers = new HashMap<>();
+        // 根据请求头的参数名称，获取对应值，并保存在Map中
         while (headerNames.hasMoreElements()) {
             String header = headerNames.nextElement();
             headers.put(header, request.getHeader(header));
         }
 
+        // 获取Range
         String rangeStr = request.getHeader("Range");
         String[] range;
         if (StringUtil.isNullOrEmpty(rangeStr)) {
@@ -232,12 +244,15 @@ public class FastDFSUtil {
         if (range.length >= 3) {
             end = Long.parseLong(range[2]);
         }
-        long len = (end - begin) + 1;
+        // 分片长度
+        int len = (int) (end - begin + 1);
+
+        // 添加response返回头信息
         String contentRange = "bytes " + begin + "-" + end + "/" + totalFileSize;
         response.setHeader("Content-Range", contentRange);
         response.setHeader("Accept-Ranges", "bytes");
         response.setHeader("Content-Type", "video/mp4");
-        response.setContentLength((int) len);
+        response.setContentLength(len);
         response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
         HttpUtil.get(url, headers, response);
     }
