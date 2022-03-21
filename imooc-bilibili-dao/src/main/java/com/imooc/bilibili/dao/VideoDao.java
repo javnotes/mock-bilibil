@@ -49,4 +49,12 @@ public interface VideoDao {
     Integer updateVideoCoin(VideoCoin videoCoin);
 
     Long getVideoCoinsAmount(Long videoId);
+
+    Integer addVideoComment(VideoComment videoComment);
+
+    List<VideoComment> pageListVideoComments(Map<String, Object> params);
+
+    Integer pageCountVideoComments(Map<String, Object> params);
+
+    List<VideoComment> batchGetVideoCommentsByRootIds(@Param("rootIdList") List<Long> parentIdList);
 }

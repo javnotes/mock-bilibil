@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @description: TODO 类描述
@@ -246,5 +247,60 @@ public class VideoService {
         result.put("count", count);
         result.put("like", like);
         return result;
+    }
+
+    /**
+     * 添加视频评论
+     */
+    public void addVideoComment(VideoComment videoComment, Long userId) {
+        Long videoId = videoComment.getVideoId();
+        if (videoId == null) {
+            throw new ConditionException("参数异常！");
+        }
+
+        // 查看数据库中是否有此视频
+        Video video = videoDao.getVideoById(videoId);
+        if (video == null) {
+            throw new ConditionException("非法视频！");
+        }
+
+        videoComment.setUserId(userId);
+        videoComment.setCreateTime(new Date());
+        videoDao.addVideoComment(videoComment);
+    }
+
+    /**
+     * 分页查询视频评论
+     */
+    public PageResult<VideoComment> pageListVideoComments(Integer size, Integer no, Long videoId) {
+        Video video = videoDao.getVideoById(videoId);
+        if (video == null) {
+            throw new ConditionException("非法视频！");
+        }
+
+        // 分页查询参数
+        Map<String, Object> params = new HashMap<>();
+        params.put("start", (no - 1) * size);
+        params.put("limit", size);
+        params.put("videoId", videoId);
+        //分页查询（同条件下）一级评论总数
+        // select count(1) from t_video_comment where videoId = #{videoId} and rootId is null
+        Integer total = videoDao.pageCountVideoComments(params);
+        //即使没有评论，要返回一个空的List，而不是返回Null
+        List<VideoComment> list = new ArrayList<>();
+        if (total > 0) {
+            //查询一级评论
+            list = videoDao.pageListVideoComments(params);
+            //批量查询二级评论
+            //该视频下所有的一级评论的Id
+            List<Long> parentIdList = list.stream().map(VideoComment::getId).collect(Collectors.toList());
+            // 非一级评论
+            List<VideoComment> childCommentList = videoDao.batchGetVideoCommentsByRootIds(parentIdList);
+
+            //批量查询发出评论的用户的信息，一个用户可能发送不止一条评论，使用Set可自动去重
+            Set<Long> suerIdList =
+
+        }
+        return new PageResult<>(total, list);
     }
 }
