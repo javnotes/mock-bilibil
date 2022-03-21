@@ -98,5 +98,33 @@ public class VideoApi {
         return new JsonResponse<>(result);
     }
 
+    /**
+     * 收藏视频
+     */
+    @PostMapping("")
+
+
+    /**
+     * 取消收藏视频
+     */
+
+
+    /**
+     * 查询视频收藏数量
+     */
+
+
+
+    /**
+     * 视频投币
+     */
+
+
+
+    /**
+     * 查询视频投币数量
+     */
+
+
 
 }
