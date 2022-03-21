@@ -3,21 +3,15 @@ package com.imooc.bilibili.domain;
 import java.util.Date;
 
 /**
- * 该视频对应的用户投币的记录
+ * @author chinalife
  */
-public class VideoCoin {
+public class VideoCollection {
 
     private Long id;
-
     private Long videoId;
-
     private Long userId;
-
-    private Integer amount;
-
+    private Long groupId;
     private Date createTime;
-
-    private Date updateTime;
 
     public Long getId() {
         return id;
@@ -43,12 +37,12 @@ public class VideoCoin {
         this.userId = userId;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
     }
 
     public Date getCreateTime() {
@@ -57,13 +51,5 @@ public class VideoCoin {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

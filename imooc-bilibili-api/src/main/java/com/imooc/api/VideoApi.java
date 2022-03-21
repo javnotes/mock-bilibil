@@ -1,9 +1,7 @@
 package com.imooc.api;
 
 import com.imooc.api.support.UserSupport;
-import com.imooc.bilibili.domain.JsonResponse;
-import com.imooc.bilibili.domain.PageResult;
-import com.imooc.bilibili.domain.Video;
+import com.imooc.bilibili.domain.*;
 import com.imooc.bilibili.service.UserFollowingService;
 import com.imooc.bilibili.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,30 +99,79 @@ public class VideoApi {
     /**
      * 收藏视频
      */
-    @PostMapping("")
-
+    @PostMapping("video-colllections")
+    public JsonResponse<String> addVideoCollection(@RequestBody VideoCollection videoCollection) {
+        Long userId = userSupport.getCurrentUserId();
+        videoService.addVideoCollection(videoCollection, userId);
+        return JsonResponse.success();
+    }
 
     /**
      * 取消收藏视频
      */
-
+    @DeleteMapping("/video-collections")
+    public JsonResponse<String> deleteVideoCollection(@RequestParam Long videoId) {
+        Long userId = userSupport.getCurrentUserId();
+        videoService.deleteVideoCollection(videoId, userId);
+        return JsonResponse.success();
+    }
 
     /**
      * 查询视频收藏数量
+     * 游客、用户均可查看
      */
+    @GetMapping("/video-collections")
+    public JsonResponse<Map<String, Object>> getVideoCollections(@RequestParam Long videoId) {
+        Long userId = null;
 
+        //若为登录用户，则获取到对应userId；若为游客，则忽略异常，userId还是为NULL
+        try {
+            userId = userSupport.getCurrentUserId();
+        } catch (Exception ignored) {
+        }
+
+        Map<String, Object> result = videoService.getVideoCollections(videoId, userId);
+        return new JsonResponse<>(result);
+    }
 
 
     /**
      * 视频投币
      */
-
+    @PostMapping("/video-conis")
+    public JsonResponse<String> addVideoCoins(@RequestBody VideoCoin videoCoin) {
+        Long userId = userSupport.getCurrentUserId();
+        videoService.addVideoCoins(videoCoin, userId);
+        return JsonResponse.success();
+    }
 
 
     /**
      * 查询视频投币数量
      */
+    @GetMapping("/video-conis")
+    public JsonResponse<Map<String, Object>> getVideoCoins(@RequestParam Long videoId) {
+        Long userId = null;
+        try {
+            userId = userSupport.getCurrentUserId();
+        } catch (Exception ignored) {
+        }
 
+        Map<String, Object> result = videoService.getVideoCoins(videoId, userId);
+        return new JsonResponse<>(result);
+    }
+
+    /**
+     * 添加视频评论
+     */
+
+    /**
+     * 分页查询视频评论
+     */
+
+    /**
+     * 获取视频详情
+     */
 
 
 }

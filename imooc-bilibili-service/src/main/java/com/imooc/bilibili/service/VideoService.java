@@ -1,10 +1,7 @@
 package com.imooc.bilibili.service;
 
 import com.imooc.bilibili.dao.VideoDao;
-import com.imooc.bilibili.domain.PageResult;
-import com.imooc.bilibili.domain.Video;
-import com.imooc.bilibili.domain.VideoLike;
-import com.imooc.bilibili.domain.VideoTag;
+import com.imooc.bilibili.domain.*;
 import com.imooc.bilibili.domain.exception.ConditionException;
 import com.imooc.bilibili.service.util.FastDFSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +24,8 @@ public class VideoService {
     private VideoDao videoDao;
     @Autowired
     private FastDFSUtil fastDFSUtil;
+    @Autowired
+    private UserCoinService userCoinService;
 
 
     /**
@@ -130,6 +129,119 @@ public class VideoService {
         VideoLike videoLike = videoDao.getVideoLikeByVideoIdAndUserId(videoId, userId);
         boolean like = videoLike != null; //用户点赞过该视频
 
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("like", like);
+        return result;
+    }
+
+    /**
+     * 添加视频收藏
+     */
+    @Transactional
+    public void addVideoCollection(VideoCollection videoCollection, Long userId) {
+        Long videoId = videoCollection.getVideoId();
+        Long groupId = videoCollection.getGroupId();
+        if (videoId == null || groupId == null) {
+            throw new ConditionException("参数异常！");
+        }
+
+        Video video = videoDao.getVideoById(videoId);
+        if (video == null) {
+            throw new ConditionException("非法视频！");
+        }
+
+        // 删除原有视频收藏
+        // 收藏的视频对应一个收藏分组，先添加再删除，相当于更新或修改
+        videoDao.deleteVideoCollection(videoId, userId);
+
+        videoCollection.setUserId(userId);
+        videoCollection.setCreateTime(new Date());
+        videoDao.addVideoCollection(videoCollection);
+    }
+
+    /**
+     * 删除视频收藏
+     */
+
+    public void deleteVideoCollection(Long videoId, Long userId) {
+        // 这里不用验证参数videoId是因为只有存在videoId-userId这条记录时，才会被删除
+        videoDao.deleteVideoCollection(videoId, userId);
+    }
+
+    /**
+     * 获取视频的收藏数量
+     */
+    public Map<String, Object> getVideoCollections(Long videoId, Long userId) {
+        // 获取视频的收藏数
+        Long count = videoDao.getVideoCollections(videoId);
+
+        // 若为登录用户，需要查看该用户是否收藏过该视频
+        VideoCollection videoCollection = videoDao.getVideoCollectionsByVideoIdAndUserId(videoId, userId);
+        //true-已收藏该视频 false-未收藏过该视频-未在数据库中查询出对应记录
+        boolean like = videoCollection != null;
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("like", like);
+        return result;
+    }
+
+    /**
+     * 投币会涉及多个数据表的更新
+     */
+    @Transactional
+    public void addVideoCoins(VideoCoin videoCoin, Long userId) {
+        Long videoId = videoCoin.getVideoId();
+        // 用户想要投币的数目
+        Integer amount = videoCoin.getAmount();
+        if (videoId == null) {
+            throw new ConditionException("参数异常！");
+        }
+        Video video = videoDao.getVideoById(videoId);
+        if (video == null) {
+            throw new ConditionException("非法视频！");
+        }
+
+        //查询当前用户是否拥有足够的硬币
+        Integer userCoinsAmount = userCoinService.getUserCoinsAmount(userId);
+        userCoinsAmount = userCoinsAmount == null ? 0 : userCoinsAmount;
+        if (amount > userCoinsAmount) {
+            throw new ConditionException("硬币数量不足！");
+        }
+
+        // 查询当前用户已经对该视频投了多少硬币，用户对某一视频的投币记录只有一条，多次投币会对记录进行更新
+        VideoCoin dbVideoCoin = videoDao.getVideoCoinByVideoIdAndUserId(videoId, userId);
+        // 新增视频投币
+        if (dbVideoCoin == null) { //当前用户未对该视频投币过
+            videoCoin.setUserId(userId);
+            videoCoin.setCreateTime(new Date());
+            videoDao.addVideoCoin(videoCoin);
+        } else { //当前用户对该视频投币过
+            Integer dbAmount = dbVideoCoin.getAmount();
+            dbAmount += amount;
+
+            //更新该用户对该视频的投币记录
+            videoCoin.setUserId(userId);
+            videoCoin.setAmount(dbAmount);
+            videoCoin.setUpdateTime(new Date());
+            videoDao.updateVideoCoin(videoCoin);
+        }
+
+        // 还要更新当前用户的硬币数量
+        userCoinService.updateUserCoinsAmout(userId, (userCoinsAmount - amount));
+
+    }
+
+    /**
+     * 查询视频投币数量
+     */
+    public Map<String, Object> getVideoCoins(Long videoId, Long userId) {
+        Long count = videoDao.getVideoCoinsAmount(videoId);
+
+        // 还要查询登录用户是否对该视频投币过
+        VideoCoin videoCoin = videoDao.getVideoCoinByVideoIdAndUserId(videoId, userId);
+        boolean like = videoCoin != null;
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
         result.put("like", like);
