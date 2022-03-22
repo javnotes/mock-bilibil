@@ -320,19 +320,25 @@ public class VideoService {
             // Collectors.toMap：将元素收集到 Map 中的 Collector，其键和值是将映射函数应用于输入元素的结果
             Map<Long, UserInfo> userInfoMap = userInfoList.stream().collect(Collectors.toMap(UserInfo::getUserId, userInfo -> userInfo));
 
-            // list = videoDao.pageListVideoComments(params);
+            // 一级评论：list = videoDao.pageListVideoComments(params);
             list.forEach(comment -> {
+                // 获取一级评论的id
                 Long id = comment.getId();
-                // 子评论
+                // 每个一级评论中都有一个列表来存储其下的所有二级评论，开始填充此List
                 List<VideoComment> childList = new ArrayList<>();
+                // childCommentList：非一级评论，List<VideoComment> childCommentList = videoDao.batchGetVideoCommentsByRootIds(parentIdList);
                 childCommentList.forEach(child -> {
+                    // 将一级评论id与非一级评论的rootId进行比较，确定一级评论下的评论
                     if (id.equals(child.getRootId())) {
+                        // 填充非一级评论的评论用户的信息
                         child.setUserInfo(userInfoMap.get(child.getReplyUserId()));
                         childList.add(child);
                     }
                 });
 
+                // 非一级评论的用户的信息
                 comment.setChildList(childList);
+                // 主评论的
                 comment.setUserInfo(userInfoMap.get(comment.getUserId()));
             });
         }

@@ -24,6 +24,9 @@ public class VideoComment {
      */
     private Long replyUserId;
 
+    /**
+     * 非一级评论，要记录一级评论的评论id
+     */
     private Long rootId;
 
     private Date createTime;
@@ -31,7 +34,8 @@ public class VideoComment {
     private Date updateTime;
 
     /**
-     * 该评论下的所有评论，冗余字段
+     * 每一个一级评论(rootId为null)，都有一个列表来存储其下的所有二级评论
+     * 冗余字段
      * 一级评论才可以用此List，非一级评论的此 List 为 null
      */
     private List<VideoComment> childList;
