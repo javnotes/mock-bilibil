@@ -39,4 +39,6 @@ public interface UserDao {
     Integer deleteRefreshToken(@Param("refreshToken") String refreshToken, @Param("userId") Long userId);
 
     RefreshTokenDetail getRefreshTokenDetail(String refreshToken);
+
+    List<UserInfo> batchGetUserInfoByUserIds(Set<Long> userIdList);
 }

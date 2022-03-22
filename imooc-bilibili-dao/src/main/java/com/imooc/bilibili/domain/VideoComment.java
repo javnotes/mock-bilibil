@@ -12,10 +12,16 @@ public class VideoComment {
 
     private Long videoId;
 
+    /**
+     * 发出评论的评论
+     */
     private Long userId;
 
     private String comment;
 
+    /**
+     * 被评论的用户
+     */
     private Long replyUserId;
 
     private Long rootId;
@@ -24,10 +30,20 @@ public class VideoComment {
 
     private Date updateTime;
 
+    /**
+     * 该评论下的所有评论，冗余字段
+     * 一级评论才可以用此List，非一级评论的此 List 为 null
+     */
     private List<VideoComment> childList;
 
+    /**
+     * 评论人的用户信息
+     */
     private UserInfo userInfo;
 
+    /**
+     * 被评论的用户信息
+     */
     private UserInfo replyUserInfo;
 
     public Long getId() {

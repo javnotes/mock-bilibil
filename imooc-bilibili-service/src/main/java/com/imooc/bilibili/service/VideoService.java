@@ -27,6 +27,8 @@ public class VideoService {
     private FastDFSUtil fastDFSUtil;
     @Autowired
     private UserCoinService userCoinService;
+    @Autowired
+    private UserService userService;
 
 
     /**
@@ -292,15 +294,65 @@ public class VideoService {
             //查询一级评论
             list = videoDao.pageListVideoComments(params);
             //批量查询二级评论
-            //该视频下所有的一级评论的Id
+            //该视频下所有的一级评论的Id，rootId 为 null
             List<Long> parentIdList = list.stream().map(VideoComment::getId).collect(Collectors.toList());
-            // 非一级评论
+            // 非一级评论，rootId 不为 null
             List<VideoComment> childCommentList = videoDao.batchGetVideoCommentsByRootIds(parentIdList);
 
             //批量查询发出评论的用户的信息，一个用户可能发送不止一条评论，使用Set可自动去重
-            Set<Long> suerIdList =
+            // 一级评论用户的userId
+            Set<Long> userIdList = list.stream().map(VideoComment::getUserId).collect(Collectors.toSet());
 
+            // 非一级评论的用户的userId
+            Set<Long> replyUserIdList = childCommentList.stream().map(VideoComment::getUserId).collect(Collectors.toSet());
+
+            // 被评论的用户的userId
+            Set<Long> childUserIdList = childCommentList.stream().map(VideoComment::getReplyUserId).collect(Collectors.toSet());
+
+            // .addAll：如果指定的集合也是一个集合，那么 addAll 操作会有效地修改这个集合，使其值是两个集合的并集
+            userIdList.addAll(replyUserIdList);
+            userIdList.addAll(childUserIdList);
+
+            //查询所有评论人的用户信息
+            List<UserInfo> userInfoList = userService.batchGetUserInfoByUserIds(userIdList);
+
+            //讲userId-userInfo对应，方便后续快速查询
+            // Collectors.toMap：将元素收集到 Map 中的 Collector，其键和值是将映射函数应用于输入元素的结果
+            Map<Long, UserInfo> userInfoMap = userInfoList.stream().collect(Collectors.toMap(UserInfo::getUserId, userInfo -> userInfo));
+
+            // list = videoDao.pageListVideoComments(params);
+            list.forEach(comment -> {
+                Long id = comment.getId();
+                // 子评论
+                List<VideoComment> childList = new ArrayList<>();
+                childCommentList.forEach(child -> {
+                    if (id.equals(child.getRootId())) {
+                        child.setUserInfo(userInfoMap.get(child.getReplyUserId()));
+                        childList.add(child);
+                    }
+                });
+
+                comment.setChildList(childList);
+                comment.setUserInfo(userInfoMap.get(comment.getUserId()));
+            });
         }
         return new PageResult<>(total, list);
+    }
+
+    /**
+     * 获取视频详情信息
+     */
+    public Map<String, Object> getVideoDetails(Long videoId) {
+        Video video = videoDao.getVideoDetails(videoId);
+
+        // 还要查询视频作者的用户信息
+        Long userId = video.getUserId();
+        User user = userService.getUserInfo(userId);
+        UserInfo userInfo = user.getUserInfo();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("video", video);
+        result.put("userInfo", userInfo);
+        return result;
     }
 }

@@ -57,4 +57,6 @@ public interface VideoDao {
     Integer pageCountVideoComments(Map<String, Object> params);
 
     List<VideoComment> batchGetVideoCommentsByRootIds(@Param("rootIdList") List<Long> parentIdList);
+
+    Video getVideoDetails(Long id);
 }

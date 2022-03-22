@@ -215,14 +215,11 @@
         order by id
     </select>
 
-    <!--    <select id="getVideoDetails" parameterType="java.lang.Long" resultType="com.imooc.bilibili.domain.Video">-->
-    <!--        select-->
-    <!--            *-->
-    <!--        from-->
-    <!--            t_video-->
-    <!--        where-->
-    <!--            id = #{id}-->
-    <!--    </select>-->
+    <select id="getVideoDetails" parameterType="java.lang.Long" resultType="com.imooc.bilibili.domain.Video">
+        select *
+        from t_video
+        where id = #{id}
+    </select>
 
     <!--    <insert id="addVideoView" parameterType="com.imooc.bilibili.domain.VideoView">-->
     <!--        insert into-->

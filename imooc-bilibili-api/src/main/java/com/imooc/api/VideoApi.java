@@ -178,13 +178,35 @@ public class VideoApi {
     public JsonResponse<PageResult<VideoComment>> pageListVideoCommments(@RequestParam Integer size, @RequestParam Integer no, @RequestParam Long videoId) {
         PageResult<VideoComment> result = videoService.pageListVideoComments(size, no, videoId);
         return new JsonResponse<>(result);
-
     }
 
 
     /**
      * 获取视频详情
      */
+    @GetMapping("/video-details")
+    public JsonResponse<Map<String, Object>> getVideoDetails(@RequestParam Long videoId) {
+        Map<String, Object> result = videoService.getVideoDetails(videoId);
+        return new JsonResponse<>(result);
+    }
 
+    /**
+     * 添加视频观看记录
+     */
 
+    /**
+     * 查询视频播放量
+     */
+
+    /**
+     * 视频内容推荐
+     */
+
+    /**
+     * 视频帧截取生成黑白剪影
+     */
+
+    /**
+     * 查询视频黑白剪影
+     */
 }

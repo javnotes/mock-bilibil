@@ -219,4 +219,11 @@ public class UserService {
         Long userId = refreshTokenDetail.getUserId();
         return TokenUtil.generateToken(userId);
     }
+
+    /**
+     * 通过用户id，批量查询用户信息
+     */
+    public List<UserInfo> batchGetUserInfoByUserIds(Set<Long> userIdList) {
+        return userDao.batchGetUserInfoByUserIds(userIdList);
+    }
 }
