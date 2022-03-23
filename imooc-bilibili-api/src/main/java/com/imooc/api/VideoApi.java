@@ -196,18 +196,18 @@ public class VideoApi {
      * @param videoView
      * @return
      */
-    @PostMapping("/video-views")
-    public JsonResponse<String> addVideoView(@RequestBody VideoView videoView, HttpServletRequest request) {
-        Long userId = null;
-        try {
-            userId = userSupport.getCurrentUserId();
-            videoView.setUserId(userId);
-            videoService.addVideoView(videoView, request);
-        } catch (Exception e) {
-            videoService.addVideoView(videoView, request);
-        }
-        return JsonResponse.success();
-    }
+//    @PostMapping("/video-views")
+//    public JsonResponse<String> addVideoView(@RequestBody VideoView videoView, HttpServletRequest request) {
+//        Long userId = null;
+//        try {
+//            userId = userSupport.getCurrentUserId();
+//            videoView.setUserId(userId);
+//            videoService.addVideoView(videoView, request);
+//        } catch (Exception e) {
+//            videoService.addVideoView(videoView, request);
+//        }
+//        return JsonResponse.success();
+//    }
 
 
     /**

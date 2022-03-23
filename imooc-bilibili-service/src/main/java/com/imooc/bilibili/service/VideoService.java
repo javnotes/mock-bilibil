@@ -366,12 +366,12 @@ public class VideoService {
     /**
      * 添加(登录用户、游客？？)视频观看记录
      */
-    public void addVideoView(VideoView videoView, HttpServletRequest request) {
-        Long userId = videoView.getUserId();
-        Long videoId = videoView.getVideoId();
-
-        // 生成 clientId
-        String agent = request.getHeader("User-Agent");
-        UserAgent userAgent = UserAgent.parseUserAgentString(agent);
-    }
+//    public void addVideoView(VideoView videoView, HttpServletRequest request) {
+//        Long userId = videoView.getUserId();
+//        Long videoId = videoView.getVideoId();
+//
+//        // 生成 clientId
+//        String agent = request.getHeader("User-Agent");
+//        UserAgent userAgent = UserAgent.parseUserAgentString(agent);
+//    }
 }

@@ -36,7 +36,7 @@ public class TokenUtil {
     }
 
     /**
-     * 获取 userId，通过验证 token 的方式
+     * 验证token，返回userId
      */
     public static Long verifyToken(String token) {
         try {

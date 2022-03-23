@@ -13,19 +13,22 @@ public class VideoComment {
     private Long videoId;
 
     /**
-     * 发出评论的评论
+     * 投稿视频的用户Id
      */
     private Long userId;
 
+    /**
+     * 评论内容
+     */
     private String comment;
 
     /**
-     * 被评论的用户
+     * 回复用户id，即回复谁的评论
      */
     private Long replyUserId;
 
     /**
-     * 非一级评论，要记录一级评论的评论id
+     * 根节点评论id，要记录一级评论的评论id
      */
     private Long rootId;
 
@@ -34,19 +37,19 @@ public class VideoComment {
     private Date updateTime;
 
     /**
-     * 每一个一级评论(rootId为null)，都有一个列表来存储其下的所有二级评论
+     * 每一个一级评论(rootId为null)，都有一个列表List来存储其下的所有二级评论
      * 冗余字段
      * 一级评论才可以用此List，非一级评论的此 List 为 null
      */
     private List<VideoComment> childList;
 
     /**
-     * 评论人的用户信息
+     * 评论人的用户信息，即谁创建了本条评论
      */
     private UserInfo userInfo;
 
     /**
-     * 被评论的用户信息
+     * 回复谁的评论，即被评论的用户信息
      */
     private UserInfo replyUserInfo;
 
