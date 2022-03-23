@@ -95,4 +95,18 @@ public class RocketMQConfig {
         consumer.start();
         return consumer;
     }
+
+    @Bean("danmuProducer")
+    public DefaultMQProducer danmuProducer() throws Exception {
+        // 实例化消息生产者 Producer
+        DefaultMQProducer producer = new DefaultMQProducer(UserMomentsConstant.GROUP_DANMUS);
+        // 设置 NameServer 的地址
+        producer.setNamesrvAddr(nameServerAddr);
+        // 启动 Producer 实例
+        producer.start();
+        return producer;
+    }
+
+    @Bean("danmuConsumer")
+    public DefaultMQPushConsumer danmuConsumer() throws
 }

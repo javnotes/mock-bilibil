@@ -3,9 +3,11 @@ package com.imooc.bilibili.service.websocket;
 import com.alibaba.fastjson.JSONObject;
 import com.imooc.bilibili.domain.Danmu;
 import com.imooc.bilibili.service.DanmuService;
+import com.imooc.bilibili.service.util.RocketMQUtil;
 import com.imooc.bilibili.service.util.TokenUtil;
 import io.netty.util.internal.StringUtil;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -110,8 +112,6 @@ public class WebSocketService {
 
     /**
      * 进行消息通讯时，如前端发送消息
-     *
-     * @param message
      */
     @OnMessage
     public void onMessage(String message) {
@@ -120,23 +120,24 @@ public class WebSocketService {
         if (!StringUtil.isNullOrEmpty(message)) {
             try {
                 // 群发消息：某一个客户端将消息推送了弹幕后，此弹幕需要推送给所有连接中的客户端
-                //通过获取到每一个连接中的客户端对应的WebSocketService，来获取所有客户端的Session
+                //通过获取到每一个连接中的客户端对应的 WebSocketService，来获取所有客户端的 Session
                 for (Map.Entry<String, WebSocketService> entry : WEBSOCKET_MAP.entrySet()) {
                     // 获取到每一个长连的客户端对应的 WebSocketService
                     WebSocketService webSocketService = entry.getValue();
-//消费者发送消息
-//                    if(webSocketService.session.isOpen()) {
-//                        webSocketService.sendMessage(message);
-//                    }
+                    //消费者发送消息
+                    // if(webSocketService.session.isOpen()) {
+                    //     webSocketService.sendMessage(message);
+                    // }
 
-//                    // 在一个客户端对应的 WebSocketService 中，获取该客户端对应的 Session
-//                    DefaultMQProducer danmuProducer = (DefaultMQProducer) APPLICATION_CONTEXT.getBean("danmuProducer");
-//
-//                    JSONObject jsonObject = new JSONObject();
-//                    jsonObject.put("message", message);
-//                    jsonObject.put("sessionId", webSocketService.getSessionId());
-                    // Message msg = new Message()
-                    // RocketMQUtil.asyncSendMsg(danmuProducer, msg);
+                    // 在一个客户端对应的 WebSocketService 中，获取该客户端对应的 Session
+
+                    DefaultMQProducer danmuProducer = (DefaultMQProducer) APPLICATION_CONTEXT.getBean("danmuProducer");
+
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("message", message);
+                    jsonObject.put("sessionId", webSocketService.getSessionId());
+                    Message msg = new Message();
+                    RocketMQUtil.asyncSendMsg(danmuProducer, msg);
                 }
                 if (this.userId != null) { // 保存弹幕，需要用户id
                     // 保存弹幕至数据库
