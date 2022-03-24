@@ -6,6 +6,7 @@ import com.imooc.bilibili.domain.UserFollowing;
 import com.imooc.bilibili.domain.UserMoment;
 import com.imooc.bilibili.domain.constant.UserMomentsConstant;
 import com.imooc.bilibili.service.UserFollowingService;
+import com.imooc.bilibili.service.websocket.WebSocketService;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,5 +110,39 @@ public class RocketMQConfig {
     }
 
     @Bean("danmuConsumer")
-    public DefaultMQPushConsumer danmuConsumer() throws
+    public DefaultMQPushConsumer danmuConsumer() throws Exception {
+        // 实例化消费者
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(UserMomentsConstant.GROUP_DANMUS);
+        // 设置 NameServer 地址
+        consumer.setNamesrvAddr(nameServerAddr);
+        // 订阅一个/多个 Topic，以及 Tag 来过滤需要消费的消息
+        consumer.subscribe(UserMomentsConstant.TOPIC_DANMUS, "*");
+
+        // 注册回调实现类，处理从 broker 拉取回来的消息
+        consumer.registerMessageListener(new MessageListenerConcurrently() {
+            @Override
+            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+                MessageExt msg = msgs.get(0);
+                byte[] msgByte = msg.getBody();
+                String bodyStr = new String(msgByte);
+                JSONObject jsonObject = JSONObject.parseObject(bodyStr);
+
+                String sessionId = jsonObject.getString("sessionId");
+                String message = jsonObject.getString("message");
+
+                WebSocketService webSocketService = WebSocketService.WEBSOCKET_MAP.get(sessionId);
+                if (webSocketService.getSession().isOpen()) {
+                    try {
+                        webSocketService.sendMessage(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                // 标记该消息已经被成功消费
+                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+            }
+        });
+        consumer.start();
+        return consumer;
+    }
 }

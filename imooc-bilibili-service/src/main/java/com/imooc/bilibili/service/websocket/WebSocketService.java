@@ -2,6 +2,7 @@ package com.imooc.bilibili.service.websocket;
 
 import com.alibaba.fastjson.JSONObject;
 import com.imooc.bilibili.domain.Danmu;
+import com.imooc.bilibili.domain.constant.UserMomentsConstant;
 import com.imooc.bilibili.service.DanmuService;
 import com.imooc.bilibili.service.util.RocketMQUtil;
 import com.imooc.bilibili.service.util.TokenUtil;
@@ -11,12 +12,14 @@ import org.apache.rocketmq.common.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -136,14 +139,16 @@ public class WebSocketService {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("message", message);
                     jsonObject.put("sessionId", webSocketService.getSessionId());
-                    Message msg = new Message();
+                    Message msg = new Message(UserMomentsConstant.TOPIC_DANMUS, jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8));
                     RocketMQUtil.asyncSendMsg(danmuProducer, msg);
                 }
+
                 if (this.userId != null) { // 保存弹幕，需要用户id
                     // 保存弹幕至数据库
                     Danmu danmu = JSONObject.parseObject(message, Danmu.class);
                     danmu.setUserId(userId);
                     danmu.setCreateTime(new Date());
+
                     DanmuService danmuService = (DanmuService) APPLICATION_CONTEXT.getBean("danmuService");
                     danmuService.asyncAddDanmu(danmu);
                     //保存弹幕到redis
@@ -160,9 +165,22 @@ public class WebSocketService {
     public void onError(Throwable error) {
     }
 
-    // 发送消息，this：WebSocketService实例
+    /**
+     * 发送消息，this：WebSocketService实例
+     */
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
+    }
+
+    /**
+     * 计划任务，统计当前在线人数
+     * 指定了时间间隔，例如：5秒
+     */
+    @Scheduled
+    private void noticeOnlineCount() {
+        for (Map.Entry<String, WebSocketService> entry : WebSocketService.WEBSOCKET_MAP.entrySet()) {
+            WebSocketService webSocketService = entry.getValue();
+        }
     }
 
     public Session getSession() {
