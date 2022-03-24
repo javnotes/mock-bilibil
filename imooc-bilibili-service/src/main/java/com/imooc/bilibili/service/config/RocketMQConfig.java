@@ -108,5 +108,8 @@ public class RocketMQConfig {
     }
 
     @Bean("danmuConsumer")
-    public DefaultMQPushConsumer danmuConsumer() throws
+    public DefaultMQPushConsumer danmuConsumer() throws Exception {
+
+
+    }
 }
