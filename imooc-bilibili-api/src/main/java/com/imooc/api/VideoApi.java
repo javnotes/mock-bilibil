@@ -2,7 +2,7 @@ package com.imooc.api;
 
 import com.imooc.api.support.UserSupport;
 import com.imooc.bilibili.domain.*;
-import com.imooc.bilibili.service.UserFollowingService;
+import com.imooc.bilibili.service.ElasticSearchService;
 import com.imooc.bilibili.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +23,8 @@ public class VideoApi {
     private VideoService videoService;
     @Autowired
     private UserSupport userSupport;
+    @Autowired
+    private ElasticSearchService elasticSearchService;
 
     /**
      * 视频投稿
@@ -32,8 +34,9 @@ public class VideoApi {
         Long userId = userSupport.getCurrentUserId();
         video.setUserId(userId);
         videoService.addVideos(video);
-        //在es中添加一条视频
-        // elasticSearchService.addVideo(video)
+        // 在es中添加一条视频
+        // 必须先在数据库中添加，数据库会生成 Video 的主键
+        elasticSearchService.addVideo(video)
         return JsonResponse.success();
     }
 
@@ -54,9 +57,7 @@ public class VideoApi {
     @GetMapping("/video-slices")
     public void viewVideoOnlineBySlices(HttpServletRequest request, HttpServletResponse response, String url) {
         videoService.viewVideoOnlineBySlices(request, response, url);
-
     }
-
 
     /**
      * 点赞视频
@@ -134,7 +135,6 @@ public class VideoApi {
         return new JsonResponse<>(result);
     }
 
-
     /**
      * 视频投币
      */
@@ -144,7 +144,6 @@ public class VideoApi {
         videoService.addVideoCoins(videoCoin, userId);
         return JsonResponse.success();
     }
-
 
     /**
      * 查询视频投币数量
@@ -156,7 +155,6 @@ public class VideoApi {
             userId = userSupport.getCurrentUserId();
         } catch (Exception ignored) {
         }
-
         Map<String, Object> result = videoService.getVideoCoins(videoId, userId);
         return new JsonResponse<>(result);
     }
