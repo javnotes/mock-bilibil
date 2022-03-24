@@ -34,6 +34,7 @@ public class DanmuService {
     public void addDanmu(Danmu danmu) {
         danmuDao.addDanmu(danmu);
     }
+
     /**
      * 异步保存弹幕
      */
@@ -44,42 +45,43 @@ public class DanmuService {
 
 
     /**
-     * 查询策略是优先查redis中的弹幕数据，
-     * 如果没有的话查询数据库，然后把查询的数据写入redis当中
+     * 查询策略是优先查 redis 中的弹幕数据，
+     * 如果没有的话查询数据库，然后把查询的数据写入 redis 当中
      */
-    public List<Danmu> getDanmus(Map<String, Object> params) {
-        return danmuDao.getDanmus(params);
+    public List<Danmu> getDanmus(Long videoId, String startTime, String endTime) throws Exception {
+        String key = DAMU_KEY + videoId;
+        // 在 Rdis 中，某视频的弹幕都在 value 中
+        String value = redisTemplate.opsForValue().get(key);
+
+        List<Danmu> list;
+        if (!StringUtil.isNullOrEmpty(value)) { // redis 中能查询到视频的弹幕
+            list = JSONArray.parseArray(value, Danmu.class);
+            // 时间段不为null
+            if (!StringUtil.isNullOrEmpty(startTime) && !StringUtil.isNullOrEmpty(endTime)) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date startDate = sdf.parse(startTime);
+                Date endDate = sdf.parse(endTime);
+
+                List<Danmu> childList = new ArrayList<>();
+                for (Danmu danmu : list) {
+                    Date createTime = danmu.getCreateTime(); // 检查弹幕的创建时间是否在时间段内
+                    if (createTime.after(startDate) && createTime.before(endDate)) {
+                        childList.add(danmu);
+                    }
+                }
+                list = childList;
+            }
+        } else { // 去MySQL中查询弹幕
+            Map<String, Object> params = new HashMap<>();
+            params.put("videoId", videoId);
+            params.put("startTime", startTime);
+            params.put("endTime", endTime);
+            list = danmuDao.getDanmus(params);
+            // 保存弹幕到redis
+            redisTemplate.opsForValue().set(key, JSONObject.toJSONString(list));
+        }
+        return list;
     }
-//    public List<Danmu> getDanmus(Long videoId, String startTime, String endTime) throws Exception {
-//        String key = DAMU_KEY + videoId;
-//        String value = redisTemplate.opsForValue().get(key);
-//        List<Danmu> list;
-//        if (!StringUtil.isNullOrEmpty(value)) {
-//            list = JSONArray.parseArray(value, Danmu.class);
-//            if (!StringUtil.isNullOrEmpty(startTime) && !StringUtil.isNullOrEmpty(endTime)) {
-//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                Date startDate = sdf.parse(startTime);
-//                Date endDate = sdf.parse(endTime);
-//                List<Danmu> childList = new ArrayList<>();
-//                for (Danmu danmu : list) {
-//                    Date createTime = danmu.getCreateTime();
-//                    if (createTime.after(startDate) && createTime.before(endDate)) {
-//                        childList.add(danmu);
-//                    }
-//                }
-//                list = childList;
-//            }
-//        } else {
-//            Map<String, Object> params = new HashMap<>();
-//            params.put("videoId", videoId);
-//            params.put("startTime", startTime);
-//            params.put("endTime", endTime);
-//            list = danmuDao.getDanmus(params);
-//            // 保存弹幕到redis
-//            redisTemplate.opsForValue().set(key, JSONObject.toJSONString(list));
-//        }
-//        return list;
-//    }
 
     public void addDanmusToRedis(Danmu danmu) {
         String key = "danmu-video-" + danmu.getVideoId();
@@ -93,6 +95,4 @@ public class DanmuService {
         list.add(danmu);
         redisTemplate.opsForValue().set(key, JSONObject.toJSONString(danmu));
     }
-
-
 }
