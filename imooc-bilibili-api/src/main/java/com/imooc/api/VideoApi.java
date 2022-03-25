@@ -36,7 +36,7 @@ public class VideoApi {
         videoService.addVideos(video);
         // 在es中添加一条视频
         // 必须先在数据库中添加，数据库会生成 Video 的主键
-        elasticSearchService.addVideo(video)
+        elasticSearchService.addVideo(video);
         return JsonResponse.success();
     }
 
