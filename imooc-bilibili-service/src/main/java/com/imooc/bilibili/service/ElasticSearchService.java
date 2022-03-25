@@ -5,17 +5,14 @@ import com.imooc.bilibili.dao.repository.VideoRepository;
 import com.imooc.bilibili.domain.UserInfo;
 import com.imooc.bilibili.domain.Video;
 import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +23,6 @@ import java.util.concurrent.TimeUnit;
  * @author: luf
  * @date: 2022/3/25
  **/
-
 @Service
 public class ElasticSearchService {
     @Autowired
