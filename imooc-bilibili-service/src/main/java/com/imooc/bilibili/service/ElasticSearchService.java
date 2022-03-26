@@ -40,6 +40,9 @@ public class ElasticSearchService {
         userInfoRepository.save(userInfo);
     }
 
+    /**
+     * 多类型的关键词全文检索 + 分页
+     */
     public List<Map<String, Object>> getContents(String keyword, Integer pageNo, Integer pageSize) {
         String[] indices = {"videos", "user-infos"};
         SearchRequest searchRequest = new SearchRequest(indices);
