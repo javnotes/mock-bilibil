@@ -64,6 +64,9 @@ public class ElasticSearchService {
         }
         highlightBuilder.requireFieldMatch(false); //如果要多个字段进行高亮，要为 false
 
+
+
+        return null;
     }
 
 
