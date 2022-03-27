@@ -44,7 +44,7 @@ public class VideoApi {
      * （分区内）分页查询视频列表-瀑布流
      * 首页中，每个分区都先查询部分数据。
      */
-    @GetMapping("/video")
+    @GetMapping("/videos")
     public JsonResponse<PageResult<Video>> pageListVideos(Integer size, Integer no, String area) {
         PageResult<Video> result = videoService.pageListVideos(size, no, area);
         return new JsonResponse<>(result);

@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date: 2022/3/23
  **/
 @Component
-@ServerEndpoint("/imserver{token}")
+@ServerEndpoint("/imserver/{token}")
 public class WebSocketService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -176,7 +176,7 @@ public class WebSocketService {
      * 计划任务，统计当前在线人数
      * 指定了时间间隔，例如：5秒
      */
-    @Scheduled
+    @Scheduled(fixedRate = 5000)
     private void noticeOnlineCount() throws IOException {
         for (Map.Entry<String, WebSocketService> entry : WebSocketService.WEBSOCKET_MAP.entrySet()) {
             WebSocketService webSocketService = entry.getValue();
