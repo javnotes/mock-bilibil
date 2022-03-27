@@ -80,7 +80,7 @@ public class ElasticSearchService {
         }
         highlightBuilder.requireFieldMatch(false); //如果要多个字段进行高亮，要为 false
         highlightBuilder.preTags("<span style=\"color:red\">");
-        highlightBuilder.postTags("</span>");
+        highlightBuilder.postTags("<span>");
 
         sourceBuilder.highlighter(highlightBuilder);
 

@@ -4,11 +4,13 @@ import com.imooc.api.support.UserSupport;
 import com.imooc.bilibili.domain.*;
 import com.imooc.bilibili.service.ElasticSearchService;
 import com.imooc.bilibili.service.VideoService;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -189,32 +191,43 @@ public class VideoApi {
     }
 
     /**
-     * 添加(登录用户、游客？？)视频观看记录
-     *
-     * @param videoView
-     * @return
+     * 添加视频观看记录：同一用户，退出登录后再观看，也算一次播放量，而且clientId 是相同的，一个『用户』一天只有一次播放量
+     * request：游客需要通过request获取ip、clientId
      */
-//    @PostMapping("/video-views")
-//    public JsonResponse<String> addVideoView(@RequestBody VideoView videoView, HttpServletRequest request) {
-//        Long userId = null;
-//        try {
-//            userId = userSupport.getCurrentUserId();
-//            videoView.setUserId(userId);
-//            videoService.addVideoView(videoView, request);
-//        } catch (Exception e) {
-//            videoService.addVideoView(videoView, request);
-//        }
-//        return JsonResponse.success();
-//    }
+    @PostMapping("/video-views")
+    public JsonResponse<String> addVideoView(@RequestBody VideoView videoView, HttpServletRequest request) {
+        Long userId = null;
+        try {
+            //登录用户需统计userId
+            userId = userSupport.getCurrentUserId();
+            videoView.setUserId(userId);
+            videoService.addVideoView(videoView, request);
+        } catch (Exception e) {
+            //游客需统计 clientId+ip
+            videoService.addVideoView(videoView, request);
+        }
+        return JsonResponse.success();
+    }
 
 
     /**
      * 查询视频播放量
      */
+    @GetMapping("/video-view-counts")
+    public JsonResponse<Integer> getVideoViewCounts(@RequestParam Long videoId) {
+        Integer count = videoService.getVideoViewCounts(videoId);
+        return new JsonResponse<>(count);
+    }
 
     /**
      * 视频内容推荐
      */
+    @GetMapping("/recommendations")
+    public JsonResponse<List<Video>> recommend() throws TasteException {
+        Long userId = userSupport.getCurrentUserId();
+        List<Video> list = videoService.recommend(userId);
+        return new JsonResponse<>(list);
+    }
 
     /**
      * 视频帧截取生成黑白剪影
