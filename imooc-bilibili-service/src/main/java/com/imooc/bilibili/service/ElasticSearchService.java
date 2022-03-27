@@ -45,14 +45,18 @@ public class ElasticSearchService {
      */
     public List<Map<String, Object>> getContents(String keyword, Integer pageNo, Integer pageSize) {
         String[] indices = {"videos", "user-infos"};
+        //SearchRequest：es原生的查询类，构建查询请求
         SearchRequest searchRequest = new SearchRequest(indices);
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        //SearchSourceBuilder：查询时的配置
 
-        // 分页
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        //SearchSourceBuilder：配置分页
         sourceBuilder.from(pageNo - 1);
         sourceBuilder.size(pageSize);
+        //多条件下的查询请求构建器
         MultiMatchQueryBuilder matchQueryBuilder = QueryBuilders.multiMatchQuery(keyword, "title", "nick", "description");
         sourceBuilder.query(matchQueryBuilder);
+
         searchRequest.source(sourceBuilder);
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
 
