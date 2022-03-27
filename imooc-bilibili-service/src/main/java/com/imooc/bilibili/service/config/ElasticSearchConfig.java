@@ -16,7 +16,7 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 @Configuration
 public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
 
-    @Value("{elasticsearch.url}")
+    @Value("${elasticsearch.url}")
     private String esUrl;
 
     @Bean
