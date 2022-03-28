@@ -191,8 +191,11 @@ public class VideoApi {
     }
 
     /**
-     * 添加视频观看记录：同一用户，退出登录后再观看，也算一次播放量，而且clientId 是相同的，一个『用户』一天只有一次播放量
-     * request：游客需要通过request获取ip、clientId
+     * 视频观看记录：同一用户，退出登录后再观看，也算一次播放量，而且clientId 是相同的，一个『用户』一天只有一次播放量
+     * request：需要通过request获取游客的ip、clientId
+     * 观看记录可用于统计视频的播放量
+     * 播放量计数规则：同一个用户一天1次，游客一天1次（用户退出登录后观看也参与计算播放量）
+     * 游客区分规则：操作系统+浏览器+IP
      */
     @PostMapping("/video-views")
     public JsonResponse<String> addVideoView(@RequestBody VideoView videoView, HttpServletRequest request) {
@@ -211,7 +214,7 @@ public class VideoApi {
 
 
     /**
-     * 查询视频播放量
+     * 查询视频播放量，根据观看记录来统计
      */
     @GetMapping("/video-view-counts")
     public JsonResponse<Integer> getVideoViewCounts(@RequestParam Long videoId) {

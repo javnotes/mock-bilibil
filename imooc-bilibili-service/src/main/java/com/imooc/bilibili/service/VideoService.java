@@ -449,12 +449,12 @@ public class VideoService {
         //获取用户相似程度
         UserSimilarity similarity = new UncenteredCosineSimilarity(dataModel);
         System.out.println(similarity.userSimilarity(11, 12));
-        //获取用户邻居
+        //获取用户邻居(最接近的2个)
         UserNeighborhood userNeighborhood = new NearestNUserNeighborhood(2, similarity, dataModel);
         long[] ar = userNeighborhood.getUserNeighborhood(userId);
-        //构建推荐器
+        //构建推荐器(基于用户的)
         Recommender recommender = new GenericUserBasedRecommender(dataModel, userNeighborhood, similarity);
-        //推荐视频
+        //推荐视频(推荐的数量是 5)
         List<RecommendedItem> recommendedItems = recommender.recommend(userId, 5);
         List<Long> itemIds = recommendedItems.stream().map(RecommendedItem::getItemID).collect(Collectors.toList());
         return videoDao.batchGetVideosByIds(itemIds);
@@ -482,11 +482,18 @@ public class VideoService {
         return videoDao.batchGetVideosByIds(itemIds);
     }
 
+    /**
+     * 传入用户的偏好列表
+     */
     private DataModel createDataModel(List<UserPreference> userPreferenceList) {
         FastByIDMap<PreferenceArray> fastByIdMap = new FastByIDMap<>();
+        //Map：key-userId，value-user的所有UserPreference(喜好得分)，注意value为list
         Map<Long, List<UserPreference>> map = userPreferenceList.stream().collect(Collectors.groupingBy(UserPreference::getUserId));
+
         Collection<List<UserPreference>> list = map.values();
+        // 将每一个UserPreference转为GenericPreference
         for(List<UserPreference> userPreferences : list){
+            // list-> array，将数据库中存储的实体类映射到推荐引擎中
             GenericPreference[] array = new GenericPreference[userPreferences.size()];
             for(int i = 0; i < userPreferences.size(); i++){
                 UserPreference userPreference = userPreferences.get(i);
