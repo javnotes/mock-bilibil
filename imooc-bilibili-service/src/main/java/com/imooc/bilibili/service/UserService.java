@@ -43,7 +43,7 @@ public class UserService {
         }
 
         Date now = new Date();
-        // 对注册时填写的密码解密(前端加密)，再加密(存至数据库)
+        // 对注册时填写的密码解密(前端RSA加密)，再加密(存至数据库)
         String salt = String.valueOf(now.getTime());
         String password = user.getPassword();
         String rawPassword;

@@ -15,11 +15,11 @@ public class ConditionException extends RuntimeException {
 
     public ConditionException(String message) {
         super(message);
-        code = "500";//通用错误码
+        this.code = "500";//通用错误码
     }
 
     public String getCode() {
-        return code;
+        return this.code;
     }
 
     public void setCode(String code) {

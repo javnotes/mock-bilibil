@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public class UserApi {
 
     /**
      * 获取当前登录用户的信息，虽然根据 userId 来获取，但该方法不需要参数，是在token中获取 userId
+     * 查询某一用户信息可设置为： @GetMapping("/users/{id}")
      **/
     @GetMapping("/users")
     public JsonResponse<User> getUserInfo() {
@@ -128,6 +130,7 @@ public class UserApi {
             // 查询该页中的用户，是否已经关注了
             List<UserInfo> checkUserInfoList = userFollowingService.checkFollowingStatus(result.getList(), userId);
             result.setList(checkUserInfoList);
+
         }
         return new JsonResponse<>(result);
     }

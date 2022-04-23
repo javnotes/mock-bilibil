@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * 直接传输userId不太安全
+ * 生成用户令牌，表明身份，因为直接传输userId不太安全
  *
  * @author luf
  * @date 2022/03/03 23:44
@@ -22,13 +22,13 @@ public class TokenUtil {
     private static final String ISSURE = UserConstant.TOKEN_ISSURE;
 
     /**
-     * 创建 JWT
+     * 创建(用户令牌) JWT
      */
     public static String generateToken(Long userId) throws Exception {
         Algorithm algorithm = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR, 1);
+        calendar.add(Calendar.HOUR, 1);//过期时间
         return JWT.create().withKeyId(String.valueOf(userId))
                 .withIssuer(ISSURE)
                 .withExpiresAt(calendar.getTime())
@@ -39,7 +39,7 @@ public class TokenUtil {
      * 验证token，返回userId
      */
     public static Long verifyToken(String token) {
-        try {
+        try {//不直接返回异常，可能可以刷新异常
             Algorithm algorithm = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
             // 生成验证类
             JWTVerifier verifier = JWT.require(algorithm).build();

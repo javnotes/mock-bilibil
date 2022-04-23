@@ -11,19 +11,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * 全局异常处理器
+ * Ordered.HIGHEST_PRECEDENCE：最高优先级
  * @author luf
  * @date 2022/03/03 20:41
  **/
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CommonGlobalExceptionHandler {
-
+    /**
+     * 异常处理器
+     */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public JsonResponse<String> commonExceptionHandler(HttpServletRequest request, Exception e) {
         String errorMsg = e.getMessage();
         if (e instanceof ConditionException) {
             String errorCode = ((ConditionException) e).getCode();
+            // 在抛出异常时，返回响应数据JsonResponse
             return new JsonResponse<>(errorCode, errorMsg);
         } else {
             return new JsonResponse<>("500", errorMsg);

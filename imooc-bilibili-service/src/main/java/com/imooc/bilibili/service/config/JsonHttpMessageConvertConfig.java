@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 /**
+ * Json信息转换配置
  * @author luf
  * @date 2022/03/03 19:50
  **/
@@ -17,9 +18,12 @@ public class JsonHttpMessageConvertConfig {
     @Bean
     @Primary
     public HttpMessageConverters fastJsonHttpMessageConverts() {
+        // fastConverter 是 HttpMessageConverter 的实例
         FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        // json 序列化配置：不省略空的String、List、Map，转为空字符串，
+        // 排序：MapSortField，禁用循环引用：DisableCircularReferenceDetect
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,
                 SerializerFeature.WriteNullStringAsEmpty,
                 SerializerFeature.WriteNullListAsEmpty,

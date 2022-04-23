@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * 用户账号相关
+ * 冗余字段：UserInfo
  * @author luf
  * @date 2022/03/03 21:13
  **/
@@ -22,6 +23,9 @@ public class User {
 
     private Date updateTime;
 
+    /**
+     * 冗余字段
+     */
     private UserInfo userInfo;
 
     public Long getId() {

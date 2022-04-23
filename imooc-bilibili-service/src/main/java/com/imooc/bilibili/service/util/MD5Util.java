@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 /**
- * MD5加密
+ * MD5加密(将用户密码加密后保存至数据库)
  * 单向加密算法
  * 特点：加密速度快，不需要秘钥，但是安全性不高，需要搭配随机盐值使用
  */

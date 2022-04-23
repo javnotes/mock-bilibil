@@ -11,7 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 获取当前用户的 userId，通过验证 token 的方式
+ * 通过验证 token 的方式，获取当前用户的 userId
  *
  * @author luf
  * @date 2022/03/05 11:56
@@ -23,7 +23,7 @@ public class UserSupport {
     private UserService userService;
 
     /**
-     * 获取当前用户的 userId，通过验证 token 的方式(调用方法 verifyToken)，而token是来源在请求的请求头
+     * 获取当前用户的 userId，通过验证 token 的方式(调用方法 verifyToken)，而token是来源在浏览器请求的请求头
      */
     public Long getCurrentUserId() {
         // RequestContextHolder.getRequestAttributes()：框架提供的，抓取请求上下文的方法
