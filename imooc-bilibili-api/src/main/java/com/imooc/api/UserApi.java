@@ -59,9 +59,9 @@ public class UserApi {
     }
 
     /**
-     * 用户登录成功后，会获取到该用户的用户凭证，也就是用户令牌(tokens)
+     * 用户登录:成功后，会获取到该用户的用户凭证，也就是用户令牌(tokens)
      */
-    @PostMapping("/users-tokens")
+    @PostMapping("/user-tokens")
     public JsonResponse<String> login(@RequestBody User user) throws Exception {
         String token = userService.login(user);
         return new JsonResponse<>(token);
@@ -70,7 +70,7 @@ public class UserApi {
     /**
      * 登录：双token：1.处理用户退出后，token有效的问题 2.在用户无感的情况下，更新token
      */
-    @PostMapping("/users-dts")
+    @PostMapping("/user-dts")
     public JsonResponse<Map<String, Object>> loginForDts(@RequestBody User user) throws Exception {
         Map<String, Object> map = userService.loginForDts(user);
         return new JsonResponse<>(map);
@@ -102,7 +102,7 @@ public class UserApi {
      * 更新用户信息
      * 注意：一般在token中获取userId，不是从前端中传输，防止伪造
      */
-    @PostMapping("/users-infos")
+    @PostMapping("/user-infos")
     public JsonResponse<String> updateUserInfo(@RequestBody UserInfo userInfo) {
         Long userId = userSupport.getCurrentUserId();
         userInfo.setUserId(userId);
@@ -115,7 +115,7 @@ public class UserApi {
      * 方法参数：当前页码、每页展示的数据条数、用户昵称（可用于模糊查询）
      * 专门用于封装分页查询的结果
      */
-    @GetMapping("/users-infos")
+    @GetMapping("/user-infos")
     public JsonResponse<PageResult<UserInfo>> pageListUserInfos(@RequestParam Integer pageNum, @RequestBody Integer pageSize, String nick) {
         Long userId = userSupport.getCurrentUserId();
         //JSONObject：相当于是个map,public JSONObject(Map<String, Object> map) {}

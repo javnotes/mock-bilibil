@@ -56,7 +56,6 @@ public class TokenUtil {
     /**
      * 双token，刷新令牌
      */
-
     public static String generateRefreshToken(Long userId) throws Exception {
         Algorithm algorithm = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
         Calendar calendar = Calendar.getInstance();
