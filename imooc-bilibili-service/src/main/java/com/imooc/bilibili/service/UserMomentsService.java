@@ -29,6 +29,7 @@ public class UserMomentsService {
     private UserMomentsDao userMomentsDao;
 
     @Autowired
+    //整个应用的上下文：可以提供所有的配置和Bean，这里主要是用于获取RocketMQConfig中定义的Bean momentsProducer、momentsConsumer
     private ApplicationContext applicationContext;
 
     @Autowired
@@ -40,9 +41,9 @@ public class UserMomentsService {
 
         // 获取生产者
         DefaultMQProducer producer = (DefaultMQProducer) applicationContext.getBean("momentsProducer");
-        // 消息的主题+消息
+        // 生成消息的主题+消息内容（需要先转为字符串，再转为byte数组）
         Message msg = new Message(UserMomentsConstant.TOPIC_MOMENTS, JSONObject.toJSONString(userMoment).getBytes(StandardCharsets.UTF_8));
-        // 发送消息
+        // 发送消息至MQ
         RocketMQUtil.syncSendMsg(producer, msg);
     }
 

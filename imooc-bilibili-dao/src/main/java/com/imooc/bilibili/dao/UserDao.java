@@ -41,4 +41,8 @@ public interface UserDao {
     RefreshTokenDetail getRefreshTokenDetail(String refreshToken);
 
     List<UserInfo> batchGetUserInfoByUserIds(Set<Long> userIdList);
+
+    Integer updateUsers(User user);
+
+    User getUserByPhoneOrEmail(@Param("phone") String phone, @Param("email") String email);
 }

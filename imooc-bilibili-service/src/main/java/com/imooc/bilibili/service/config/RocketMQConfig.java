@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * RocketMQ 配置
+ *
  * @author luf
  * @date 2022/03/07 22:50
  **/
@@ -40,7 +42,7 @@ public class RocketMQConfig {
     private UserFollowingService userFollowingService;
 
     /**
-     * 用户动态相关的生产者
+     * 创建用户动态相关的生产者
      */
     @Bean("momentsProducer")
     public DefaultMQProducer momentsProducer() throws Exception {
@@ -52,17 +54,17 @@ public class RocketMQConfig {
     }
 
     /**
-     * 用户动态相关的消费者
+     * 创建用户动态相关的消费者
      */
     @Bean("momentsConsumer")
     public DefaultMQPushConsumer momentsConsumer() throws Exception {
-        // push 类型
+        // push 类型：订阅发布模式：代理人推送给消费者
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(UserMomentsConstant.GROUP_MOMENTS);
         consumer.setNamesrvAddr(nameServerAddr);
-        // 消费者订阅生产者，话题、内容
+        // 消费者需要订阅生产者，主题+二级主题/内容，*代表该主题下的所有内容
         consumer.subscribe(UserMomentsConstant.TOPIC_MOMENTS, "*");
         // 生产者将消息推给MQ后，MQ就将相关的消息推给消费者，消费者通过监听器来抓取消息，并进一步地对消息进行处理
-        // 此处使用了并行监听器
+        // 此处使用了并行监听器 MessageListenerConcurrently，其中方法参数：消息+上下文
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
@@ -71,12 +73,13 @@ public class RocketMQConfig {
                     // 返回一个状态：消息消费成功
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 }
-                // 获取动态
+                // 消息不为NULL，从中获取实例userMoment，其中 msg.getBody() 为 byte 数组。
                 String bodyStr = new String(msg.getBody());
                 UserMoment userMoment = JSONObject.toJavaObject(JSONObject.parseObject(bodyStr), UserMoment.class);
-                // 获取该用户Id是要查找其粉丝
+                // 获取该用户Id是要查找其粉丝，即哪些人关注了此人
                 Long userId = userMoment.getUserId();
                 List<UserFollowing> fanList = userFollowingService.getUserFans(userId);
+                //发送至Redis，用户至Redis中查询
                 for (UserFollowing fan : fanList) {
                     // Redis中的key
                     String key = "subscribed-" + fan.getUserId();

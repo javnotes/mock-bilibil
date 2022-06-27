@@ -58,6 +58,14 @@ public class UserApi {
         return JsonResponse.success();
     }
 
+    @PutMapping
+    public JsonResponse<String> updateUsers(@RequestBody User user) throws Exception {
+        Long userId = userSupport.getCurrentUserId();
+        user.setId(userId);
+        userService.updateUsers(user);
+        return JsonResponse.success();
+    }
+
     /**
      * 用户登录:成功后，会获取到该用户的用户凭证，也就是用户令牌(tokens)
      */

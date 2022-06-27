@@ -39,7 +39,7 @@ public class TokenUtil {
      * 验证token，返回userId
      */
     public static Long verifyToken(String token) {
-        try {//不直接返回异常，可能可以刷新异常
+        try {//不直接返回异常，可能是令牌过期，需要刷新token
             Algorithm algorithm = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
             // 生成验证类
             JWTVerifier verifier = JWT.require(algorithm).build();

@@ -77,22 +77,25 @@ public class UserService {
     }
 
     /**
-     * 用户登录
+     * 用户登录：手机号/邮箱登录
      */
     public String login(User user) throws Exception {
 
-        String phone = user.getPhone();
-        if (StringUtils.isNullOrEmpty(phone)) {
-            throw new ConditionException("手机号不能为空！");
+        String phone = user.getPhone() == null ? "" : user.getPhone();
+        String email = user.getEmail() == null ? "" : user.getEmail();
+
+        if (StringUtils.isNullOrEmpty(phone) && StringUtils.isNullOrEmpty(email)) {
+            throw new ConditionException("当前用户不存在！");
         }
+
         // 验证账号
-        User dbUser = this.getUserByPhone(phone);
+        User dbUser = userDao.getUserByPhoneOrEmail(phone, email);
         if (dbUser == null) {
             throw new ConditionException("当前用户不存在！");
         }
         // 验证密码，此时存在前端传来的user，和保存在数据库中的dbUser
-        String password = user.getPassword();
-        String rawPassword;
+        String password = user.getPassword();//前端RSA加密后的字符串
+        String rawPassword;//等于前端加密后传入后端的密码，再解密后的字符串
         try {
             rawPassword = RSAUtil.decrypt(password);
         } catch (Exception e) {
@@ -225,5 +228,24 @@ public class UserService {
      */
     public List<UserInfo> batchGetUserInfoByUserIds(Set<Long> userIdList) {
         return userDao.batchGetUserInfoByUserIds(userIdList);
+    }
+
+    public void updateUsers(User user) throws Exception {
+        Long id = user.getId();
+
+        //验证数据库中是否有此用户
+        User dbUser = userDao.getUserById(id);
+        if (dbUser == null) {
+            throw new ConditionException("用户不存在！");
+        }
+
+        // 密码更新的验证
+        if (!StringUtils.isNullOrEmpty(user.getPassword())) {
+            String rawPassword = RSAUtil.decrypt(user.getPassword());
+            String md5Password = MD5Util.sign(rawPassword, dbUser.getSalt(), "UTF-8");
+            user.setPassword(md5Password);
+        }
+        user.setUpdateTime(new Date());
+        userDao.updateUsers(user);
     }
 }

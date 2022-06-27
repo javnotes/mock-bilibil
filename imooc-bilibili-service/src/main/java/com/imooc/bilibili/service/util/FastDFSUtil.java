@@ -29,6 +29,10 @@ public class FastDFSUtil {
     @Autowired
     private FastFileStorageClient fastFileStorageClient;
 
+    /**
+     * 支持断点续传的文件服务接口
+     *  适合处理大文件，分段传输
+     */
     @Autowired
     private AppendFileStorageClient appendFileStorageClient;
 
@@ -51,7 +55,7 @@ public class FastDFSUtil {
     @Value("${mooc.bilibili.slices.address}")
     private String tempSliceFilesAddr;
 
-
+    //获取文件类型
     public String getFileType(MultipartFile file) {
         if (file == null) {
             throw new ConditionException("非法文件！");
@@ -61,7 +65,7 @@ public class FastDFSUtil {
         return fileName.substring(index + 1);
     }
 
-    // 上传
+    // 上传一般文件（中小型文件），返回上传后文件的存储的具体路径
     public String uploadCommonFile(MultipartFile file) throws Exception {
         Set<MetaData> metaDataSet = new HashSet<>();
         String fileType = this.getFileType(file);

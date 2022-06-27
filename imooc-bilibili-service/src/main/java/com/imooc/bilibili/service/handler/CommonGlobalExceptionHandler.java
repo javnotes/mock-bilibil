@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 全局异常处理器
+ * 全局异常处理器：@ControllerAdvice 配合 @ExceptionHandler 实现全局异常处理
  * Ordered.HIGHEST_PRECEDENCE：最高优先级
  * @author luf
  * @date 2022/03/03 20:41

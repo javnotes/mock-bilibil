@@ -35,4 +35,6 @@ build/
 
 
 ### Sql
-*.properties
+**/*.properties
+
+**/.DS_Store
