@@ -31,7 +31,7 @@ public class FastDFSUtil {
 
     /**
      * 支持断点续传的文件服务接口
-     *  适合处理大文件，分段传输
+     * 适合处理大文件，分段传输
      */
     @Autowired
     private AppendFileStorageClient appendFileStorageClient;
@@ -134,29 +134,31 @@ public class FastDFSUtil {
         String uploadedNostr = redisTemplate.opsForValue().get(uploadedNoKey);
         Integer uploadedNo = Integer.valueOf(uploadedNostr);
         String resultPath = ""; //文件上传后存储的地址
-        if (uploadedNo.equals(totalSliceNo)) {
+        if (uploadedNo.equals(totalSliceNo)) {//完成上传后，清空对应redis中的值
             resultPath = redisTemplate.opsForValue().get(pathKey);
             List<String> keyList = Arrays.asList(uploadedNoKey, pathKey, uploadedSizeKey);
             redisTemplate.delete(keyList);
         }
-        return resultPath;
+        return resultPath; //返回文件上传后存储的地址
     }
 
     /**
      * 文件分片
+     * multipartFile：要分片的文件
      */
     public void convertFileToSlices(MultipartFile multipartFile) throws Exception {
         String fileType = this.getFileType(multipartFile);
+        System.out.println(fileType);
         //生成临时文件，将MultipartFile转为File
         File tempFile = this.multipartFileToFile(multipartFile);
         //.length 返回此抽象路径名表示的文件的长度（以字节为单位）
         long fileLength = tempFile.length();
         int count = 1;
-        //实际分片
+        //实际分片，一次循环得到一个分片
         for (int i = 0; i < fileLength; i += SLICE_SIZE) {
             // RandomAccessFile：此类的实例支持读取和写入随机访问文件。
             RandomAccessFile randomAccessFile = new RandomAccessFile(tempFile, "r");
-            randomAccessFile.seek(i);
+            randomAccessFile.seek(i); //每次分片的开始位置
             byte[] bytes = new byte[SLICE_SIZE];
             //从此文件中读取最多 b.length 个字节的数据到一个字节数组中，返回读入缓冲区的总字节数
             int len = randomAccessFile.read(bytes);
@@ -180,8 +182,11 @@ public class FastDFSUtil {
      */
     public File multipartFileToFile(MultipartFile multipartFile) throws Exception {
         String originalFileName = multipartFile.getOriginalFilename();
+        System.out.println("文件类型转换时，originalFileName=" + originalFileName);
         String[] fileName = originalFileName.split("\\.");
         File file = File.createTempFile(fileName[0], "." + fileName[1]);
+        System.out.println(fileName[0]);
+        System.out.println(fileName[1]);
         multipartFile.transferTo(file);
         return file;
     }
