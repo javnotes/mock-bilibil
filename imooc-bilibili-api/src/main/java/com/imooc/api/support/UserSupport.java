@@ -26,7 +26,7 @@ public class UserSupport {
      * 获取当前用户的 userId，通过验证 token 的方式(调用方法 verifyToken)，而token是来源在浏览器请求的请求头
      */
     public Long getCurrentUserId() {
-        // RequestContextHolder.getRequestAttributes()：框架提供的，抓取请求上下文的方法
+        // RequestContextHolder.getRequestAttributes()：SpringBoot 框架提供的，抓取请求上下文的方法
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
 

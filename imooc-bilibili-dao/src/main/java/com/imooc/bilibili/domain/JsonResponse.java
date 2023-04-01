@@ -1,6 +1,7 @@
 package com.imooc.bilibili.domain;
 
 /**
+ * 返回结果 封装类
  * @author luf
  * @date 2022/03/03 19:38
  **/
@@ -28,7 +29,7 @@ public class JsonResponse<T> {
     }
 
     /**
-     * 成功，但不返回数据
+     * 请求成功，但不需要返回数据
      */
     public static JsonResponse<String> success() {
         return new JsonResponse<>(null);

@@ -38,10 +38,10 @@ public class MD5Util {
     }
 
     /**
-     * 获取文件md5加密后的字符串
+     * 获取文件MD5加密后的字符串
      */
     public static String getFileMD5(MultipartFile file) throws Exception {
-        //.getInputStream 输入流，都是对底层流的加工处理
+        //InputStream 输入流，都是对底层流的加工处理,MultipartFile.getInputStream()
         InputStream fis = file.getInputStream();
         //输出流
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

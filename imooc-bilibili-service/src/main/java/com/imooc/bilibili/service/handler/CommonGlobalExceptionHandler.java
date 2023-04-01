@@ -20,7 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CommonGlobalExceptionHandler {
     /**
-     * 异常处理器
+     * 全局异常处理器
+     * HttpServletRequest 封装的前端传来的请求
      */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody

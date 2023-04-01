@@ -1,6 +1,7 @@
 package com.imooc.bilibili.domain.exception;
 
 /**
+ * 异常的数据实体类：条件异常，根据条件抛出异常
  * @author luf
  * @date 2022/03/03 20:47
  **/

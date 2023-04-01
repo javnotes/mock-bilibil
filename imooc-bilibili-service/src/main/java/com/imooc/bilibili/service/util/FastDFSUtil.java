@@ -26,6 +26,9 @@ import java.util.*;
  **/
 @Component
 public class FastDFSUtil {
+    /**
+     * 面向普通应用的文件操作接口封装
+     */
     @Autowired
     private FastFileStorageClient fastFileStorageClient;
 
@@ -216,7 +219,7 @@ public class FastDFSUtil {
 
         // request 把前端发送的请求头，原封不动地发送到文件服务器，即请求转发
         // 需要将获取到的文件流，写入到response中、
-        // .getHeaderNames：获取所有请求头的参数的名称
+        // HttpServletRequest.getHeaderNames：获取所有请求头的参数的名称
         Enumeration<String> headerNames = request.getHeaderNames();
         Map<String, Object> headers = new HashMap<>();
         // 根据请求头的参数名称，获取对应值，并保存在Map中

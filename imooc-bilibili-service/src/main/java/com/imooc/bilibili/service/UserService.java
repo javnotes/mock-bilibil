@@ -77,7 +77,7 @@ public class UserService {
     }
 
     /**
-     * 用户登录：手机号/邮箱登录
+     * 用户登录：手机号/邮箱登录，登录成功后生成token并返回
      */
     public String login(User user) throws Exception {
 

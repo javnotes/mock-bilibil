@@ -19,12 +19,14 @@ import java.util.Date;
  **/
 public class TokenUtil {
 
+    // 开发者签名
     private static final String ISSURE = UserConstant.TOKEN_ISSURE;
 
     /**
-     * 创建(用户令牌) JWT
+     * 根据userId创建(用户令牌) JWT
      */
     public static String generateToken(Long userId) throws Exception {
+        // RSA：
         Algorithm algorithm = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -36,7 +38,7 @@ public class TokenUtil {
     }
 
     /**
-     * 验证token，返回userId
+     * 验证传入的token，返回userId
      */
     public static Long verifyToken(String token) {
         try {//不直接返回异常，可能是令牌过期，需要刷新token
