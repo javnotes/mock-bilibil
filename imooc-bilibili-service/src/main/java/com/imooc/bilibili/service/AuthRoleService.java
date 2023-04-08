@@ -19,8 +19,10 @@ import java.util.Set;
 @Service
 public class AuthRoleService {
 
+    // 角色-操作相关服务，如查询角色对应的所有操作
     @Autowired
     private AuthRoleElementOperationService authRoleElementOperationService;
+    // 角色-菜单相关服务，如查询角色对应的所有菜单
     @Autowired
     private AuthRoleMenuService authRoleMenuService;
     @Autowired

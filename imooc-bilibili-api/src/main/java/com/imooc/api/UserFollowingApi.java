@@ -49,7 +49,7 @@ public class UserFollowingApi {
     /**
      * 获取粉丝
      */
-    @PostMapping("/user-fans")
+    @GetMapping("/user-fans")
     public JsonResponse<List<UserFollowing>> getUserFans() {
         Long userId = userSupport.getCurrentUserId();
         List<UserFollowing> result = userFollowingService.getUserFans(userId);
