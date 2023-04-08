@@ -7,11 +7,13 @@ import java.util.List;
  */
 public class UserAuthorities {
 
-    //前端操作权限列表
+    //前端操作权限列表,包括按钮权限和元素权限
     List<AuthRoleElementOperation> roleElementOperationList;
-    //前端页面菜单权限列表
+
+    //前端页面菜单权限列表,包括菜单权限和页面权限
     List<AuthRoleMenu> roleMenuList;
     //...
+
 
     public List<AuthRoleElementOperation> getRoleElementOperationList() {
         return roleElementOperationList;

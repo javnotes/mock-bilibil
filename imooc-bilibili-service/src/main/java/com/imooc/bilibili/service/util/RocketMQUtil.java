@@ -17,7 +17,7 @@ public class RocketMQUtil {
     /**
      * 同步发送消息
      */
-    public static void syncSendMsg(DefaultMQProducer producer, Message msg) throws Exception {
+    public static void syncSendMsg(Message msg, DefaultMQProducer producer) throws Exception {
         SendResult result = producer.send(msg);
         System.out.println(result);
     }
@@ -25,8 +25,8 @@ public class RocketMQUtil {
     /**
      * 异步发送消息
      */
-    public static void asyncSendMsg(DefaultMQProducer producer, Message msg) throws Exception {
-        // 回调：SendCallback
+    public static void asyncSendMsg(Message msg, DefaultMQProducer producer) throws Exception {
+        // 回调：SendCallback,用于异步发送消息后的回调,当消息发送成功后，会调用 onSuccess() 方法,当消息发送失败后，会调用 onException() 方法
         producer.send(msg, new SendCallback() {
             @Override
             //消息发送成功后的回调

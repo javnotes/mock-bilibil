@@ -31,9 +31,9 @@ public class UserMomentsApi {
     /**
      * 新增用户动态
      * 用户a发布动态后，关注了a的用户b，就可以看到a的动态
-     *
      * @ApiLimitedRole：基于Api进行权限控制，AuthRoleConstant.ROLE_LV0不允许发送动态
      * @DataLimited：基于数据进行权限控制。切入方法，获取所有参数，循环遍历，如果有指定对象实例，在对实例属性进行检查
+     * @RequestBody的作用是将前端传过来的json数据转换成java对象
      */
     @ApiLimitedRole(limitedRoleCodeList = {AuthRoleConstant.ROLE_LV0})
     @DataLimited
@@ -45,9 +45,14 @@ public class UserMomentsApi {
         return JsonResponse.success();
     }
 
-    @GetMapping("/user-subscribed-moments")
+    /**
+     * 获取用户动态，关注的用户发布的动态
+     * @return
+     */
+        @GetMapping("/user-subscribed-moments")
     public JsonResponse<List<UserMoment>> getUserSubscribedMoments() {
         Long userId = userSupport.getCurrentUserId();
+        // 获取该用户关注的用户发布的动态
         List<UserMoment> list = userMomentsService.getUserSubscribedMoments(userId);
         return new JsonResponse<>(list);
     }

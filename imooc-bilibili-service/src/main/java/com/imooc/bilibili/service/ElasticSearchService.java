@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @description: TODO 类描述
+ * ElasticSearchService: es的service
  * @author: luf
  * @date: 2022/3/25
  **/

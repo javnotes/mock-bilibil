@@ -45,4 +45,6 @@ public interface UserDao {
     Integer updateUsers(User user);
 
     User getUserByPhoneOrEmail(@Param("phone") String phone, @Param("email") String email);
+
+    String getRefreshTokenByUserId(Long userId);
 }

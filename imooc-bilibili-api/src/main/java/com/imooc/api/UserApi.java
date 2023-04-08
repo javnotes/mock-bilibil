@@ -85,7 +85,21 @@ public class UserApi {
     }
 
     /**
-     * 退出登录：删除现有的token
+     * 根据（数据库中的）refreshToken（中的userId）来重新生成accessToken
+     * 前端验证refreshToken是否过期，如果过期，重新登录，否则，重新生成accessToken
+     */
+    @PostMapping("/access-tokens")
+    public JsonResponse<String> refreshAccessToken(HttpServletRequest request) throws Exception {
+        // 获取请求头中的refreshToken
+        String refreshToken = request.getHeader("refreshtenToken");
+
+        String accessToken = userService.refreshAccessToken(refreshToken);
+        return new JsonResponse<>(accessToken);
+    }
+
+    /**
+     * 用户退出登录，删除refreshToken。
+     * HttpServletRequest request：获取请求头中的refreshToken
      */
     @DeleteMapping("/refresh-tokens")
     public JsonResponse<String> logout(HttpServletRequest request) {
@@ -94,17 +108,6 @@ public class UserApi {
         userService.logout(refreshToken, userId);
         return JsonResponse.success();
     }
-
-    /**
-     * 根据（数据库中的）refreshToken（中的userId）来重新生成accessToken
-     */
-    @PostMapping("/access-tokens")
-    public JsonResponse<String> refreshAccessToken(HttpServletRequest request) throws Exception {
-        String refreshToken = request.getHeader("refreshtenToken");
-        String accessToken = userService.refreshAccessToken(refreshToken);
-        return new JsonResponse<>(accessToken);
-    }
-
 
     /**
      * 更新用户信息

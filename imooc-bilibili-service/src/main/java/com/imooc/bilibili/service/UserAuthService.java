@@ -24,7 +24,8 @@ public class UserAuthService {
     @Autowired
     private AuthRoleService authRoleService;
 
-
+    // 一个用户可以有多种角色，通过用户Id查询该用户有哪些角色
+    // 该用户所有角色的id，roleId,根据roleId查询页面级的访问权限,根据roleId查询页面菜单按钮的操作权限,赋值userAuthorities
     public UserAuthorities getUserAuthorities(Long userId) {
         //一个用户可以有多种角色，通过用户Id查询该用户有哪些角色
         List<UserRole> userRoleList = userRoleService.getUserRoleByUserId(userId);

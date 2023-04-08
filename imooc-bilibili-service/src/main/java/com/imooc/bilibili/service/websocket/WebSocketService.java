@@ -26,7 +26,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @description: @ServerEndpoint标识WebSocket服务类，访问路径：“/imserver{token}”
+ * WebSocket可以实现服务端与客户端的全双工通信，即服务端可以主动向客户端推送消息，客户端也可以主动向服务端发送消息，而且是实时的，
+ * 不需要客户端或服务端进行轮询，这样就大大节省了服务器资源，提高了系统的性能。
+ * WebSocket实现了客户端与服务端的全双工通信，是HTML5开始提供的一种在单个TCP连接上进行全双工通讯的协议。
+ * WebSocket的出现，使得客户端和服务端之间的数据交换变得更加简单，允许服务端主动向客户端推送数据。
+ * 全双工通信：即客户端和服务端都可以同时向对方发送或接收数据。
+ * @ServerEndpoint标识WebSocket服务类，访问路径：“/imserver{token}”
  * @author: luf
  * @date: 2022/3/23
  **/
@@ -140,7 +145,7 @@ public class WebSocketService {
                     jsonObject.put("message", message);
                     jsonObject.put("sessionId", webSocketService.getSessionId());
                     Message msg = new Message(UserMomentsConstant.TOPIC_DANMUS, jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8));
-                    RocketMQUtil.asyncSendMsg(danmuProducer, msg);
+                    RocketMQUtil.asyncSendMsg(msg, danmuProducer);
                 }
 
                 if (this.userId != null) { // 保存弹幕，需要用户id

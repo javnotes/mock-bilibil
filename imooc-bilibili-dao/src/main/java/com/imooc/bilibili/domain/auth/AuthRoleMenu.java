@@ -2,6 +2,9 @@ package com.imooc.bilibili.domain.auth;
 
 import java.util.Date;
 
+/**
+ * 角色菜单关联表
+ */
 public class AuthRoleMenu {
 
     private Long id;

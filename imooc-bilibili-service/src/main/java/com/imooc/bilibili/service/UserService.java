@@ -191,14 +191,16 @@ public class UserService {
         if (!md5Password.equals(dbUser.getPassword())) {
             throw new ConditionException("密码错误！");
         }
-        // 开始双token
+        // 开始双token，生成accessToken和refreshToken,并保存refreshToken至数据库,返回给前端
         Long userId = dbUser.getId();
         String accessToken = TokenUtil.generateToken(userId);
         String refreshToken = TokenUtil.generateRefreshToken(userId);
-        // 保存 refreshToken 至数据库
+        // 保存 refreshToken 至数据库，用于刷新accessToken。使用删除再添加的方式，保证每个用户只有一个refreshToken
         userDao.deleteRefreshTokenByUserId(userId);
         userDao.addRefreshToken(refreshToken, userId, new Date());
+        // 返回给前端
         Map<String, Object> result = new HashMap<>();
+        // 生成的accessToken-接入Token和refreshToken刷新Token
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -213,6 +215,7 @@ public class UserService {
 
     /**
      * 根据（数据库中的）refreshToken（中的userId）来重新生成accessToken
+     * 前端验证refreshToken是否过期，如果过期，前端会调用此方法，重新生成accessToken
      */
     public String refreshAccessToken(String refreshToken) throws Exception {
         RefreshTokenDetail refreshTokenDetail = userDao.getRefreshTokenDetail(refreshToken);
@@ -247,5 +250,9 @@ public class UserService {
         }
         user.setUpdateTime(new Date());
         userDao.updateUsers(user);
+    }
+
+    public String getRefreshTokenByUserId(Long userId) {
+        return userDao.getRefreshTokenByUserId(userId);
     }
 }
