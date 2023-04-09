@@ -55,7 +55,7 @@ public class FastDFSUtil {
 
     @Value("${fdfs.http.storage-addr}")
     private String httpFdfsStorageAddr;
-    @Value("${mooc.bilibili.slices.address}")
+    @Value("${imooc.bilibili.slices.address}")
     private String tempSliceFilesAddr;
 
     //获取文件类型

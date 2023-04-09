@@ -1,4 +1,4 @@
-package com.imooc.api;
+package com.imooc.bilibili.api;
 
 import com.imooc.bilibili.domain.JsonResponse;
 import com.imooc.bilibili.service.FileService;

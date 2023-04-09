@@ -1,6 +1,6 @@
-package com.imooc.api;
+package com.imooc.bilibili.api;
 
-import com.imooc.api.support.UserSupport;
+import com.imooc.bilibili.api.support.UserSupport;
 import com.imooc.bilibili.domain.JsonResponse;
 import com.imooc.bilibili.domain.UserMoment;
 import com.imooc.bilibili.domain.annotation.ApiLimitedRole;
@@ -31,8 +31,9 @@ public class UserMomentsApi {
     /**
      * 新增用户动态
      * 用户a发布动态后，关注了a的用户b，就可以看到a的动态
-     * @ApiLimitedRole：基于Api进行权限控制，AuthRoleConstant.ROLE_LV0不允许发送动态
-     * @DataLimited：基于数据进行权限控制。切入方法，获取所有参数，循环遍历，如果有指定对象实例，在对实例属性进行检查
+     * @ApiLimitedRole：基于Api进行权限控制，AuthRoleConstant.ROLE_LV0不允许发送动态，权限不足时，抛出异常
+     * @DataLimited：基于数据进行权限控制。切入方法，获取到切入方法所有参数，循环遍历，如果有指定对象实例，在对实例属性进行检查
+     * @ApiLimitedRole和@DataLimited都是基于AOP实现的,权限控制的逻辑都在切面类里实现的
      * @RequestBody的作用是将前端传过来的json数据转换成java对象
      */
     @ApiLimitedRole(limitedRoleCodeList = {AuthRoleConstant.ROLE_LV0})

@@ -1,6 +1,6 @@
-package com.imooc.api;
+package com.imooc.bilibili.api;
 
-import com.imooc.api.support.UserSupport;
+import com.imooc.bilibili.api.support.UserSupport;
 import com.imooc.bilibili.domain.*;
 import com.imooc.bilibili.service.ElasticSearchService;
 import com.imooc.bilibili.service.VideoService;

@@ -1,6 +1,6 @@
-package com.imooc.api;
+package com.imooc.bilibili.api;
 
-import com.imooc.api.support.UserSupport;
+import com.imooc.bilibili.api.support.UserSupport;
 import com.imooc.bilibili.domain.Danmu;
 import com.imooc.bilibili.domain.JsonResponse;
 import com.imooc.bilibili.service.DanmuService;

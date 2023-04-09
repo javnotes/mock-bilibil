@@ -1,4 +1,4 @@
-package com.imooc.api;
+package com.imooc.bilibili.api;
 
 import org.springframework.web.bind.annotation.RestController;
 

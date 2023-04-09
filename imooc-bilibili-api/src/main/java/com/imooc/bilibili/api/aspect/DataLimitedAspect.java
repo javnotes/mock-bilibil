@@ -1,6 +1,6 @@
-package com.imooc.api.aspect;
+package com.imooc.bilibili.api.aspect;
 
-import com.imooc.api.support.UserSupport;
+import com.imooc.bilibili.api.support.UserSupport;
 import com.imooc.bilibili.domain.UserMoment;
 import com.imooc.bilibili.domain.auth.UserRole;
 import com.imooc.bilibili.domain.constant.AuthRoleConstant;
@@ -44,22 +44,24 @@ public class DataLimitedAspect {
 
     /**
      * 权限限制：UserMoment.type，其中视频投稿type=0
+     * check()切点，切入到被@DataLimited注解的方法中,并获取参数,判断是否有权限,没有权限则抛出异常
      */
     @Before("check()")
     public void doBefore(JoinPoint joinPoint) {
         Long userId = userSupport.getCurrentUserId();
         List<UserRole> userRoleList = userRoleService.getUserRoleByUserId(userId);
         Set<String> userRoleCodeSet = userRoleList.stream().map(UserRole::getRoleCode).collect(Collectors.toSet());
-        // 获取当前切到的方法中的参数
+        //joinPoint.getArgs()返回的是一个数组，获取当前切到的方法中的参数
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
             if (arg instanceof UserMoment) {
                 UserMoment userMoment = (UserMoment) arg;
                 String type = userMoment.getType();
-                if (userRoleCodeSet.contains(AuthRoleConstant.ROLE_LV0) && !"0".equals(type)) {
-                    // 角色为Lv0且动态类型为0，则该用户有权限
+                if (userRoleCodeSet.contains(AuthRoleConstant.ROLE_LV0) && "0".equals(type)) {
+                    // 角色为Lv0且动态类型为0，则该用户没有权限发布该类型的动态
                     throw new ConditionException("权限不足！");
                 }
+                // 这里不再需要判断，因为Lv1及以上用户可以发布所有类型的动态
             }
         }
     }

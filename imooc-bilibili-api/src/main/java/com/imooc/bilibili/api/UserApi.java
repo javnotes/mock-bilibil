@@ -1,7 +1,7 @@
-package com.imooc.api;
+package com.imooc.bilibili.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.imooc.api.support.UserSupport;
+import com.imooc.bilibili.api.support.UserSupport;
 import com.imooc.bilibili.domain.JsonResponse;
 import com.imooc.bilibili.domain.PageResult;
 import com.imooc.bilibili.domain.User;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +57,10 @@ public class UserApi {
         return JsonResponse.success();
     }
 
-    @PutMapping
+    /**
+     * 更新用户信息
+     */
+    @PutMapping("/users")
     public JsonResponse<String> updateUsers(@RequestBody User user) throws Exception {
         Long userId = userSupport.getCurrentUserId();
         user.setId(userId);

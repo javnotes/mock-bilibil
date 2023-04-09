@@ -1,4 +1,4 @@
-package com.imooc.api.support;
+package com.imooc.bilibili.api.support;
 
 import com.imooc.bilibili.domain.exception.ConditionException;
 import com.imooc.bilibili.service.UserService;
