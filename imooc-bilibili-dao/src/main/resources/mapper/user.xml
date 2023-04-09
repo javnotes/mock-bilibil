@@ -139,7 +139,7 @@
         delete
         from t_refresh_token
         where refreshToken = #{refreshToken}
-          and userId = #userId{}
+          and userId = #{userId}
     </delete>
 
     <delete id="deleteRefreshTokenByUserId" parameterType="java.lang.Long">
@@ -158,18 +158,14 @@
                 #{createTime})
     </insert>
 
-    <select id="getRefreshTokenDetail" parameterType="java.lang.String"
-            resultType="com.imooc.bilibili.domain.RefreshTokenDetail">
-        select *
-        from t_refresh_token
-        where refreshToken = #{refreshToken}
+    <select id="getRefreshTokenDetail" parameterType="java.lang.String" resultType="com.imooc.bilibili.domain.RefreshTokenDetail">
+        select
+        *
+        from
+        t_refresh_token
+        where
+        refreshToken = #{refreshToken}
     </select>
-
-    <!--    <select id="getRefreshTokenByUserId" parameterType="java.lang.Long" resultType="java.lang.String">-->
-    <!--        select refreshToken-->
-    <!--        from t_refresh_token-->
-    <!--        where userId = #{userId}-->
-    <!--    </select>-->
 
     <select id="batchGetUserInfoByUserIds" resultType="com.imooc.bilibili.domain.UserInfo">
         select * from t_user_info

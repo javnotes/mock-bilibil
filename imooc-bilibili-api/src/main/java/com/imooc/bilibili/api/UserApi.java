@@ -93,7 +93,7 @@ public class UserApi {
     @PostMapping("/access-tokens")
     public JsonResponse<String> refreshAccessToken(HttpServletRequest request) throws Exception {
         // 获取请求头中的refreshToken
-        String refreshToken = request.getHeader("refreshtenToken");
+        String refreshToken = request.getHeader("refreshToken");
 
         String accessToken = userService.refreshAccessToken(refreshToken);
         return new JsonResponse<>(accessToken);
@@ -101,7 +101,9 @@ public class UserApi {
 
     /**
      * 用户退出登录，删除refreshToken。
-     * HttpServletRequest request：获取请求头中的refreshToken
+     * HttpServletRequest是SpringMVC中的，可以直接在方法参数中使用，
+     * 它是系统自动注入的，自动封装好的一个关于请求所有相关的参数的集合对象，包括请求头、请求体、请求参数等，可以通过它来获取请求的相关信息。
+     * 这里是用于获取请求头中的refreshToken
      */
     @DeleteMapping("/refresh-tokens")
     public JsonResponse<String> logout(HttpServletRequest request) {

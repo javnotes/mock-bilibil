@@ -214,6 +214,8 @@ public class UserService {
     }
 
     /**
+     * 刷新accessToken,先验证refreshToken是否过期，
+     * 如果refreshToken过期，抛出异常，前端会要求用户重新登录,如果没过期，重新生成accessToken
      * 根据（数据库中的）refreshToken（中的userId）来重新生成accessToken
      * 前端验证refreshToken是否过期，如果过期，前端会调用此方法，重新生成accessToken
      */
