@@ -21,6 +21,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class ImoocBilibiliApp {
     public static void main(String[] args) {
         ApplicationContext applicationContext = SpringApplication.run(ImoocBilibiliApp.class, args);
+        // 初始化WebSocketService,将ApplicationContext传入,方便后续使用,比如获取bean,获取配置文件等,不用再通过静态方法获取
+        //该方法在WebSocketService中,在启动时就会执行,所以不用担心WebSocketService中的bean为空
+        //而且该方法是静态方法,所以不用担心多线程问题
         WebSocketService.setApplicationContext(applicationContext);
     }
 }
